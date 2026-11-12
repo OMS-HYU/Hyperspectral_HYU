@@ -114,7 +114,7 @@ def fit(engine,y,w,dest,method="spectral"):
     result=dict(wavelength_nm=w,method=method,gd_iterations=100,lbfgs_iterations=accepted,
         completed=accepted==100,termination=reason,sensor_l2=float(np.sqrt(loss)),
         sensor_sha256=digest(y),phase_sha256=digest(phase),geometry=list(GEOMETRY),
-        B17_archive_sha256=engine.archive_sha,B17_inner_shas=engine.inner_shas,
+        B17_archive_sha256=engine.archive_sha,B17_source_fingerprint=engine.source_fingerprint,B17_inner_shas=engine.inner_shas,
         phase_range=[0,float(TAU)],alpha=ALPHA,truth_in_inverse=False,
         spectral_preconditioner_source="660 nm historical Jacobian; heuristic at other wavelengths" if method=="spectral" else "identity",
         **calls)
@@ -130,7 +130,7 @@ def generate(engine,dest,scene,w,seed,image_file=None,geometry_seed=20261127):
     np.savez_compressed(dest/"private_truth.npz",actual_wavelength_nm=w,**truth)
     write_json(dest/"generation.json",dict(scene=scene,seed=seed,geometry_seed=geometry_seed,noise_sigma=sigma,
         noise_pct_mean=1,geometry=list(GEOMETRY),phase_range=[0,float(TAU)],
-        sensor_sha256=digest(y),B17_archive_sha256=engine.archive_sha,
+        sensor_sha256=digest(y),B17_archive_sha256=engine.archive_sha,B17_source_fingerprint=engine.source_fingerprint,
         B17_inner_shas=engine.inner_shas,sources=SOURCES if scene in RBC_MODELS else {},
         model_assumption="660 nm Hb index contrast held constant at other wavelengths (nondispersive approximation)" if scene in RBC_MODELS else "grayscale phase"))
 def recover(engine,sensor,dest,mode,w,method):

@@ -11,6 +11,35 @@ from scipy.sparse import csr_matrix
 from dataclasses import dataclass
 
 EXPECTED_B17_SHA256='6264a21cb0433c691cd4511f1f9f428f8f92b160cc4388845b6c9b0586fad716'
+LUT_NAME='bayesLUT_MSE_v6.3_nonoverlap.mat'
+WIDTH_NAME='0.6NA_random_70_1_300_1mm_mapped_width.mat'
+EXPECTED_MAT_SHA256={
+    LUT_NAME:'02c551f2e24fb01d91416ea21cd17d24ae1c5e6fab0d630bff8e1fb2b4feaeaa',
+    WIDTH_NAME:'b7d799c1e3a5913e7e9034fd2efc31dc2dab98822058ef08e2e57470ac2d68f9',
+}
+
+def read_b17_source(source):
+    """Read and verify the two physical MAT arrays, from ZIP or extracted directory."""
+    p=Path(source)
+    data={}
+    if p.is_dir():
+        for name in EXPECTED_MAT_SHA256:
+            matches=list(p.rglob(name))
+            if len(matches)!=1: raise ValueError(f'Expected exactly one {name} in {p}; got {len(matches)}')
+            data[name]=matches[0].read_bytes()
+        archive_sha=None
+    elif p.is_file():
+        with zipfile.ZipFile(p) as z:
+            for name in EXPECTED_MAT_SHA256:
+                matches=[s for s in z.namelist() if Path(s).name==name]
+                if len(matches)!=1: raise ValueError(f'Expected exactly one {name} in {p}; got {len(matches)}')
+                data[name]=z.read(matches[0])
+        archive_sha=hashlib.sha256(p.read_bytes()).hexdigest()
+    else: raise FileNotFoundError(p)
+    hashes={name:hashlib.sha256(b).hexdigest() for name,b in data.items()}
+    if hashes!=EXPECTED_MAT_SHA256: raise ValueError(f'B17 physical MAT hash mismatch: {hashes}')
+    fingerprint=hashlib.sha256(('\n'.join(f'{k}:{hashes[k]}' for k in sorted(hashes))).encode()).hexdigest()
+    return data,archive_sha,hashes,fingerprint
 
 @dataclass(frozen=True)
 class Geometry:
@@ -75,16 +104,12 @@ class Model:
         return x[self.obj,self.obj].copy()
 
 class B17:
-    def __init__(self,archive_path,*,verify_hash=True):
-        p=Path(archive_path)
-        if verify_hash and hashlib.sha256(p.read_bytes()).hexdigest()!=EXPECTED_B17_SHA256:raise ValueError('Original B17 archive hash mismatch')
-        with zipfile.ZipFile(p) as a:
-            l=next(s for s in a.namelist() if s.endswith('/bayesLUT_MSE_v6.3_nonoverlap.mat'))
-            w=next(s for s in a.namelist() if s.endswith('/0.6NA_random_70_1_300_1mm_mapped_width.mat'))
-            with h5py.File(io.BytesIO(a.read(l)),'r') as f:
-                self.lam=np.asarray(f['wl_interp'],float).ravel()
-                self.lut=np.asarray(f['lut_opt_interp'],float).T
-            width=loadmat(io.BytesIO(a.read(w)))['mapped_width']
+    def __init__(self,source):
+        data,self.archive_sha,self.inner_shas,self.source_fingerprint=read_b17_source(source)
+        with h5py.File(io.BytesIO(data[LUT_NAME]),'r') as f:
+            self.lam=np.asarray(f['wl_interp'],float).ravel()
+            self.lut=np.asarray(f['lut_opt_interp'],float).T
+        width=loadmat(io.BytesIO(data[WIDTH_NAME]))['mapped_width']
         if self.lut.shape[0]!=241 or self.lam[0]>440 or self.lam[-1]<660:raise ValueError('Unexpected LUT calibration')
         self.c=Geometry();start=width.shape[0]//2-self.c.meta_n//2
         self.indices=width[start:start+self.c.meta_n,start:start+self.c.meta_n].astype(int)-60

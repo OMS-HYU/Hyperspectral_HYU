@@ -5,8 +5,14 @@ from pathlib import Path
 import numpy as np
 from scipy.io import loadmat
 SOURCE_DIRECTORY=Path(__file__).resolve().parent
-from 공통.b17_core import B17,Geometry,Model,Camera,EXPECTED_B17_SHA256
-ZIP=Path(os.environ.get('B17_ZIP',str(SOURCE_DIRECTORY.parent/'데이터'/'B17'/'05_NN_metacam-main.zip')))
+from 공통.b17_core import B17,Geometry,Model,Camera
+DATA_ROOT=SOURCE_DIRECTORY.parent/'데이터'/'B17'
+def default_source():
+ explicit=os.environ.get('B17_SOURCE') or os.environ.get('B17_ZIP')
+ if explicit: return Path(explicit)
+ archive=DATA_ROOT/'05_NN_metacam-main.zip'
+ return archive if archive.is_file() else DATA_ROOT/'05_NN_metacam-main'/'assets'/'data'/'Fab'/'B17'
+SOURCE=default_source()
 N=3800; META=1429; OBJ=512; SENSOR=3000
 WIDTH:np.ndarray|None=None
 B17OBJ:B17|None=None
@@ -14,13 +20,9 @@ B17OBJ:B17|None=None
 def load_physics():
  global WIDTH,B17OBJ
  if B17OBJ is None:
-  B17OBJ=B17(ZIP,verify_hash=False)
-  with zipfile.ZipFile(ZIP) as z:
-   name=next(s for s in z.namelist() if s.endswith('0.6NA_random_70_1_300_1mm_mapped_width.mat'))
-   widths=loadmat(io.BytesIO(z.read(name)))['mapped_width']
-  s=widths.shape[0]//2-META//2
-  WIDTH=widths[s:s+META,s:s+META].astype(np.int16)-60
-  if WIDTH.min()<0 or WIDTH.max()>240:raise ValueError('B17 width out of LUT range')
+  B17OBJ=B17(SOURCE)
+  WIDTH=B17OBJ.indices.astype(np.int16)
+  if WIDTH.shape!=(META,META) or WIDTH.min()<0 or WIDTH.max()>240:raise ValueError('B17 width out of LUT range')
  return B17OBJ,WIDTH
 
 def optics(wavelength_nm):

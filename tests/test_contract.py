@@ -1,7 +1,7 @@
 """Contract and numerical tests; optional real full-native B17 forward smoke.
 
 Run: python -m tests.test_contract
-     python hyperspectral_phase/test_unified_simulator.py --full-forward
+     python -m tests.test_contract --full-forward
 No reduced optical grids. These are not recovery accuracy experiments.
 """
 import sys,unittest
@@ -13,6 +13,15 @@ from 싱글.코드.solver import prior,preconditioner
 from 공통.spectrum_forward import multi_plan,continuum_plan,summed_forward
 
 class Contract(unittest.TestCase):
+    def test_original_b17_source(self):
+        from 공통.b17_core import EXPECTED_MAT_SHA256
+        from 공통.propagation import load_physics
+        b,idx=load_physics()
+        self.assertEqual(b.inner_shas,EXPECTED_MAT_SHA256)
+        self.assertEqual(idx.shape,(1429,1429))
+        self.assertGreaterEqual(int(idx.min()),0)
+        self.assertLessEqual(int(idx.max()),240)
+        print("Verified B17 MAT hashes:",b.inner_shas,flush=True)
     def test_fixed_contract(self):
         self.assertEqual(GEOMETRY,(3800,1429,512,3000))
         self.assertEqual((GD_STEPS,LBFGS_STEPS,ALPHA),(100,100,.015))

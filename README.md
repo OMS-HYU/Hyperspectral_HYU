@@ -16,13 +16,13 @@ One shared original B17 engine. Native propagation 3800², metasurface 1429², o
 
 ```bash
 python -m pip install -r requirements.txt
-python -m tests.test_contract
+python -m tests.test_contract --full-forward
 python -m 싱글.run --help
 python -m 멀티.run --wavelengths 500 660 --weights 1 1 --output 멀티/결과/K2_plan
 python -m 연속.run --start 440 --stop 660 --step 10 --output 연속/결과/plan
 ```
 
-Full optical runs require the original B17 ZIP at `데이터/B17/05_NN_metacam-main.zip` or the B17_ZIP environment variable. See [data instructions](데이터/B17/README.md). No surrogate replaces missing B17. Generated large output is excluded from Git. See [research status](docs/RESEARCH_PROGRESS.md), [experiment guide](docs/REPRODUCTION.md), and [data provenance](docs/DATA_SOURCES.md).
+Original B17 calibration is included in the extracted `데이터/B17/05_NN_metacam-main/assets/data/Fab/B17/` directory. The loader verifies both original MAT SHA-256 values. A matching ZIP or explicit B17_SOURCE (B17_ZIP also accepted) is supported. See [data instructions](데이터/B17/README.md). No surrogate replaces missing B17. Generated large output is excluded from Git. See [research status](docs/RESEARCH_PROGRESS.md), [experiment guide](docs/REPRODUCTION.md), and [data provenance](docs/DATA_SOURCES.md).
 
 ## Historical benchmark, not a claim about the migrated solver
 

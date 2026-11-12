@@ -34,6 +34,7 @@ class FullB17:
         from 공통.propagation import load_physics
         from 공통.b17_core import Geometry,Model,Camera
         self.b,self.idx=load_physics()
+        self.source_fingerprint=self.b.source_fingerprint
         self.Geometry,self.Model,self.Camera=Geometry,Model,Camera
     def optics(self,w):
         w=wavelength_check(w)
