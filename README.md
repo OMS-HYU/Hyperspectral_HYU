@@ -6,7 +6,7 @@ Single-shot metasurface-based phase and hyperspectral reconstruction | Hanyang U
 
 | Track | Entry point | Current status |
 |---|---|---|
-| Single (K=1) | `python -m 싱글.run` | Known / experimental Blind; GD100 + periodic or spectral L-BFGS100; migrated integrated implementation, full inverse regression pending |
+| Single (K=1) | `python -m 싱글.run` | RBC-only research; Full GD100 + Spectral Periodic L-BFGS100; known 660 nm baseline; new integrated inverse regression pending |
 | Multi (K=2–3) | `python -m 멀티.run` | full-grid incoherent forward and configuration; inverse is not yet implemented in this clean foundation |
 | Continuum | `python -m 연속.run` | quadrature and full-grid intensity forward; inverse is not yet implemented |
 
@@ -17,12 +17,17 @@ One shared original B17 engine. Native propagation 3800², metasurface 1429², o
 ```bash
 python -m pip install -r requirements.txt
 python -m tests.test_contract --full-forward
-python -m 싱글.run --help
+python -m 싱글.run single --output 싱글/결과/RBC_660
+# full synthetic RBC run; no pyramid
 python -m 멀티.run --wavelengths 500 660 --weights 1 1 --output 멀티/결과/K2_plan
 python -m 연속.run --start 440 --stop 660 --step 10 --output 연속/결과/plan
 ```
 
 Original B17 calibration is included in the extracted `데이터/B17/05_NN_metacam-main/assets/data/Fab/B17/` directory. The loader verifies both original MAT SHA-256 values. A matching ZIP or explicit B17_SOURCE (B17_ZIP also accepted) is supported. See [data instructions](데이터/B17/README.md). No surrogate replaces missing B17. Generated large output is excluded from Git. See [research status](docs/RESEARCH_PROGRESS.md), [experiment guide](docs/REPRODUCTION.md), and [data provenance](docs/DATA_SOURCES.md).
+
+## Single-track decision (2026-11-13)
+
+RBC phase recovery only. No Pyramid64 in the active solver. Full-resolution GD100 + Spectral Periodic L-BFGS100 is the baseline; the 250/300-step pyramid variants were tested at the same 660 nm sensor and did not improve ROI RMSE. Generic image data remain for multi/continuum and historical comparisons. See [decision and metrics](싱글/연구기록/개발방향.md).
 
 ## Historical benchmark, not a claim about the migrated solver
 

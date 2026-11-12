@@ -22,6 +22,13 @@ class Contract(unittest.TestCase):
         self.assertGreaterEqual(int(idx.min()),0)
         self.assertLessEqual(int(idx.max()),240)
         print("Verified B17 MAT hashes:",b.inner_shas,flush=True)
+    def test_single_rbc_only_cli(self):
+        from 싱글.코드.solver import main
+        from contextlib import redirect_stderr
+        import io
+        with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+            main(["single","--scene","tank","--output","not_created"])
+        self.assertEqual(error.exception.code,2)
     def test_fixed_contract(self):
         self.assertEqual(GEOMETRY,(3800,1429,512,3000))
         self.assertEqual((GD_STEPS,LBFGS_STEPS,ALPHA),(100,100,.015))
