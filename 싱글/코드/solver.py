@@ -5,8 +5,8 @@ import argparse,gc,json,time
 from pathlib import Path
 import numpy as np
 from scipy import fft
-from common.object_models import wrap,TAU,N,RBC_MODELS,IMAGE_MODELS,SOURCES,rbc_phase,image_phase
-from common.optics import GEOMETRY,ALPHA,GD_STEPS,LBFGS_STEPS,digest,write_json,phase_check,wavelength_check,FullB17
+from 공통.object_models import wrap,TAU,N,RBC_MODELS,IMAGE_MODELS,SOURCES,rbc_phase,image_phase
+from 공통.optics import GEOMETRY,ALPHA,GD_STEPS,LBFGS_STEPS,digest,write_json,phase_check,wavelength_check,FullB17
 
 def prior(p,alpha=ALPHA,gradient=True):
     a=np.asarray(p,dtype=np.float64).reshape(N,N)

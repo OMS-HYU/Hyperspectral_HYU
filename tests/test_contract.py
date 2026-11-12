@@ -7,10 +7,10 @@ No reduced optical grids. These are not recovery accuracy experiments.
 import sys,unittest
 import numpy as np
 from scipy import fft
-from common.object_models import N,TAU,wrap,image_phase,rbc_phase
-from common.optics import GEOMETRY,GD_STEPS,LBFGS_STEPS,ALPHA,FullB17,phase_check,wavelength_check
-from single.solver import prior,preconditioner
-from common.spectrum_forward import multi_plan,continuum_plan,summed_forward
+from 공통.object_models import N,TAU,wrap,image_phase,rbc_phase
+from 공통.optics import GEOMETRY,GD_STEPS,LBFGS_STEPS,ALPHA,FullB17,phase_check,wavelength_check
+from 싱글.코드.solver import prior,preconditioner
+from 공통.spectrum_forward import multi_plan,continuum_plan,summed_forward
 
 class Contract(unittest.TestCase):
     def test_fixed_contract(self):
@@ -69,7 +69,7 @@ def full_forward():
     """Compare the new wrapper with the frozen main at 660 nm on a full grid."""
     with fft.set_workers(2):
         engine=FullB17()
-        from common.propagation import optics,measure
+        from 공통.propagation import optics,measure
         p=wrap(image_phase("camera"))
         a=engine.predict(660,p)
         m,c=optics(660);b=measure(m,c,p)

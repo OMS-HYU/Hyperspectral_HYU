@@ -7,11 +7,11 @@ venv/
 .ruff_cache/
 .DS_Store
 *.log
-single/results/*
-!single/results/.gitkeep
-multi/results/*
-!multi/results/.gitkeep
-continuum/results/*
-!continuum/results/.gitkeep
+싱글/결과/*
+!싱글/결과/.gitkeep
+멀티/결과/*
+!멀티/결과/.gitkeep
+연속/결과/*
+!연속/결과/.gitkeep
 benchmarks/local_artifacts/
 *.tmp

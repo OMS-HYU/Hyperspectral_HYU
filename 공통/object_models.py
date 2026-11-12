@@ -19,7 +19,7 @@ def image_phase(name,path=None):
     from skimage import data,color,transform,io,util
     if name in ("custom","boat","tank","pepper"):
         if path is None and name in ("boat","tank"):
-            path=Path(__file__).resolve().parents[1]/"datasets"/"general_images"/({"boat":"boat.jpg","tank":"tank.png"}[name])
+            path=Path(__file__).resolve().parents[1]/"데이터"/"입력이미지"/({"boat":"boat.jpg","tank":"tank.png"}[name])
         if path is None: raise ValueError("This image requires --image-file PATH")
         a=io.imread(path)
     elif name=="camera_rot90": a=np.rot90(data.camera())

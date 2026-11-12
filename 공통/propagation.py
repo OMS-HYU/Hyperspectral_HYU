@@ -5,8 +5,8 @@ from pathlib import Path
 import numpy as np
 from scipy.io import loadmat
 SOURCE_DIRECTORY=Path(__file__).resolve().parent
-from common.b17_core import B17,Geometry,Model,Camera,EXPECTED_B17_SHA256
-ZIP=Path(os.environ.get('B17_ZIP',str(SOURCE_DIRECTORY.parent/'datasets'/'B17'/'05_NN_metacam-main.zip')))
+from 공통.b17_core import B17,Geometry,Model,Camera,EXPECTED_B17_SHA256
+ZIP=Path(os.environ.get('B17_ZIP',str(SOURCE_DIRECTORY.parent/'데이터'/'B17'/'05_NN_metacam-main.zip')))
 N=3800; META=1429; OBJ=512; SENSOR=3000
 WIDTH:np.ndarray|None=None
 B17OBJ:B17|None=None

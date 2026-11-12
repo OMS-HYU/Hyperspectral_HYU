@@ -6,9 +6,9 @@ Single-shot metasurface-based phase and hyperspectral reconstruction | Hanyang U
 
 | Track | Entry point | Current status |
 |---|---|---|
-| Single (K=1) | `python -m single.run` | Known / experimental Blind; GD100 + periodic or spectral L-BFGS100; migrated integrated implementation, full inverse regression pending |
-| Multi (K=2–3) | `python -m multi.run` | full-grid incoherent forward and configuration; inverse is not yet implemented in this clean foundation |
-| Continuum | `python -m continuum.run` | quadrature and full-grid intensity forward; inverse is not yet implemented |
+| Single (K=1) | `python -m 싱글.run` | Known / experimental Blind; GD100 + periodic or spectral L-BFGS100; migrated integrated implementation, full inverse regression pending |
+| Multi (K=2–3) | `python -m 멀티.run` | full-grid incoherent forward and configuration; inverse is not yet implemented in this clean foundation |
+| Continuum | `python -m 연속.run` | quadrature and full-grid intensity forward; inverse is not yet implemented |
 
 One shared original B17 engine. Native propagation 3800², metasurface 1429², object 512², sensor 3000², input pitch 350 nm, camera 2 µm, z1 400 µm, z2 5 mm, wavelength 440–660 nm. Actual phase arrays are canonical [0, 2π). No ground truth is provided to an inverse.
 
@@ -17,12 +17,12 @@ One shared original B17 engine. Native propagation 3800², metasurface 1429², o
 ```bash
 python -m pip install -r requirements.txt
 python -m tests.test_contract
-python -m single.run --help
-python -m multi.run --wavelengths 500 660 --weights 1 1 --output multi/results/K2_plan
-python -m continuum.run --start 440 --stop 660 --step 10 --output continuum/results/plan
+python -m 싱글.run --help
+python -m 멀티.run --wavelengths 500 660 --weights 1 1 --output 멀티/결과/K2_plan
+python -m 연속.run --start 440 --stop 660 --step 10 --output 연속/결과/plan
 ```
 
-Full optical runs require the original B17 ZIP at `datasets/B17/05_NN_metacam-main.zip` or the B17_ZIP environment variable. See [data instructions](datasets/B17/README.md). No surrogate replaces missing B17. Generated large output is excluded from Git. See [research status](docs/RESEARCH_PROGRESS.md), [experiment guide](docs/REPRODUCTION.md), and [data provenance](docs/DATA_SOURCES.md).
+Full optical runs require the original B17 ZIP at `데이터/B17/05_NN_metacam-main.zip` or the B17_ZIP environment variable. See [data instructions](데이터/B17/README.md). No surrogate replaces missing B17. Generated large output is excluded from Git. See [research status](docs/RESEARCH_PROGRESS.md), [experiment guide](docs/REPRODUCTION.md), and [data provenance](docs/DATA_SOURCES.md).
 
 ## Historical benchmark, not a claim about the migrated solver
 

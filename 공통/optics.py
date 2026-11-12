@@ -5,7 +5,7 @@ import hashlib,json
 from pathlib import Path
 import numpy as np
 from scipy import fft
-from common.object_models import wrap,TAU,N
+from 공통.object_models import wrap,TAU,N
 
 GEOMETRY=(3800,1429,512,3000)
 ALPHA=.015
@@ -29,10 +29,10 @@ def wavelength_check(w):
 class FullB17:
     """Reuse frozen MAIN original B17 operators, explicitly wrap LUT phase."""
     def __init__(self):
-        from common.b17_loader import check_b17
+        from 공통.b17_loader import check_b17
         _,self.measure,self.value_grad,self.wrapped_rmse,self.archive_sha,self.inner_shas=check_b17()
-        from common.propagation import load_physics
-        from common.b17_core import Geometry,Model,Camera
+        from 공통.propagation import load_physics
+        from 공통.b17_core import Geometry,Model,Camera
         self.b,self.idx=load_physics()
         self.Geometry,self.Model,self.Camera=Geometry,Model,Camera
     def optics(self,w):

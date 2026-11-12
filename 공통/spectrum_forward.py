@@ -7,7 +7,7 @@ from __future__ import annotations
 import argparse,json
 from pathlib import Path
 import numpy as np
-from common.optics import FullB17,GEOMETRY,phase_check,wavelength_check,digest
+from 공통.optics import FullB17,GEOMETRY,phase_check,wavelength_check,digest
 
 def multi_plan(wavelengths,weights):
     w=np.asarray(wavelengths,float);a=np.asarray(weights,float)
