@@ -1,6 +1,6 @@
 # 싱글 스펙트럴 명령어 생성기
 
-**[🌐 브라우저에서 바로 열기](https://htmlpreview.github.io/?https://github.com/OMS-HYU/Hyperspectral_HYU/blob/c6f888cbc463dbb5a33a6eeba51d95a073d63bc6/%EC%8B%B1%EA%B8%80/%EC%BD%94%EB%93%9C%EC%83%9D%EC%84%B1%EA%B8%B0/index.html)**
+**[🌐 브라우저에서 바로 열기](https://htmlpreview.github.io/?https://github.com/OMS-HYU/Hyperspectral_HYU/blob/27c65fa2f2e96a996451b4dee92a4459ee2f5484/%EC%8B%B1%EA%B8%80/%EC%BD%94%EB%93%9C%EC%83%9D%EC%84%B1%EA%B8%B0/index.html)**
 
 위 링크는 공개 HTML의 실행 미리보기(외부 HTMLPreview 서비스)다. GitHub 자체의 HTML 파일 보기에서는 JavaScript가 실행되지 않는다. 서비스가 차단되거나 미리보기가 작동하지 않으면 아래 오프라인 방법을 사용한다.
 
@@ -19,4 +19,4 @@ Start-Process ".\싱글\코드생성기\index.html"
 
 ## 이미지 미리보기
 
-모든 16개 기본 scene의 미리보기는 HTML에 내장된다. Boat/Tank/Peppers는 저장소 원본, RBC 5종은 660 nm/geometry seed 20261127의 합성 위상맵(128×128 표시용)을 사용한다. Custom과 파일 override는 파일 선택으로 브라우저 미리보기 가능. 실제 CLI 경로는 별도로 입력한다. [원본 이미지 및 출처](../../데이터/입력이미지/README.md).
+기존 16개 scene은 HTML에 미리보기가 내장되어 있다. 추가된 24개(Set12 12개 및 C4L 12개)는 로컬 HTML을 열면 `../../데이터/입력이미지/`의 원본 PNG를 직접 읽고, 온라인 HTMLPreview는 동일 저장소의 고정 커밋 `8bbfa05d...`의 PNG를 읽는다. 전체 40개 기본 scene 및 custom을 지원한다. 신규 이미지까지 오프라인에서 보려면 HTML만 다운로드하지 말고 저장소 전체를 최신 상태로 유지한다. Boat/Tank/Peppers는 저장소 원본, RBC 5종은 660 nm/geometry seed 20261127의 합성 위상맵(128×128 표시용)을 사용한다. Custom과 파일 override는 파일 선택으로 브라우저 미리보기 가능. 실제 CLI 경로는 별도로 입력한다. [원본 이미지 및 출처](../../데이터/입력이미지/README.md).
