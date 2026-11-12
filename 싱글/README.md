@@ -1,6 +1,6 @@
 # 싱글 K=1 — 적혈구 연구 및 일반 이미지 복원
 
-**[🌐 싱글 명령어 생성기 바로 열기](https://htmlpreview.github.io/?https://github.com/OMS-HYU/Hyperspectral_HYU/blob/c6f888cbc463dbb5a33a6eeba51d95a073d63bc6/%EC%8B%B1%EA%B8%80/%EC%BD%94%EB%93%9C%EC%83%9D%EC%84%B1%EA%B8%B0/index.html)** · [오프라인 실행 및 HTML 파일](코드생성기/README.md)
+**[🌐 싱글 명령어 생성기 바로 열기](https://htmlpreview.github.io/?https://github.com/OMS-HYU/Hyperspectral_HYU/blob/27c65fa2f2e96a996451b4dee92a4459ee2f5484/%EC%8B%B1%EA%B8%80/%EC%BD%94%EB%93%9C%EC%83%9D%EC%84%B1%EA%B8%B0/index.html)** · [오프라인 실행 및 HTML 파일](코드생성기/README.md)
 
 
 **[상세 한글 실행 가이드북](가이드북.md)**
@@ -14,6 +14,8 @@ python -m 싱글.run single --scene normal --true-wavelength 550 --mode known --
 ```
 
 적혈구 모델: normal, variable, tilt, double, triple. --geometry-seed와 --seed는 독립. --method periodic은 비교용, --mode blind는 미지 파장 실험용이며 true wavelength를 inverse에 전달하지 않는다.
+
+입력 이미지: 기본 일반 이미지 11개에 Set12 12개 및 C4L 512×512 추가 12개를 포함한 일반 이미지 35개, 적혈구 5종, 사용자 입력을 지원. 레나·바바라·Mandrill/Baboon 등 저장소의 원본 PNG를 직접 읽는다. [전체 입력 목록 및 출처](../데이터/입력이미지/README.md).
 
 일반 이미지 예시: `python -m 싱글.run single --scene camera --method pyramid --output 싱글/결과/camera660`.
 
