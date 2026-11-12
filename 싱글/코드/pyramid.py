@@ -203,8 +203,8 @@ def fit_pyramid(engine,y,w,dest):
     physical signed phase or a phase-unwrapping operation. Only wrapped phase
     arrays leave the temporary working directory.
     """
-    y=sensor_check(y);w=wavelength_check(w)
     from 싱글.코드.solver import sensor_check
+    y=sensor_check(y);w=wavelength_check(w)
     m,cam=engine.optics(w)
     calls={"forward":0,"adjoint":0}
     t=time.monotonic()
