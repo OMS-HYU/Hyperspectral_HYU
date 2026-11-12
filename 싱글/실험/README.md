@@ -9,3 +9,15 @@
 전체 광학 격자와 GD100+L-BFGS100 고정. 0~2π canonical. 피라미드는 기본 경로에서 제외. 성능, 계산량, hash, 실패 원인 기록.
 
 R0 실행: `python -m 싱글.run reference --archive PATH_TO_ORIGINAL_ZIP --output 싱글/결과/RBC_fixed_660`. 전체 재검증은 미실행.
+
+
+## 신규 알고리즘 비교
+
+[싱글 가이드북](../가이드북.md)을 기준으로 동일 센서의 Spectral/Pyramid를 비교한다.
+
+```bash
+python -m 싱글.run single --scene triple --method compare --output 싱글/결과/compare_rbc660
+python -m 싱글.run single --scene camera --method compare --output 싱글/결과/compare_camera660
+```
+
+기존 benchmark와 신규 실행 결과는 분리한다.
