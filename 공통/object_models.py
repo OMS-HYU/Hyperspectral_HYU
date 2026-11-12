@@ -15,15 +15,22 @@ SOURCES={
 }
 def wrap(x):
     return np.mod(np.asarray(x,dtype=np.float64),TAU)
+IMAGE_DIR=Path(__file__).resolve().parents[1]/"데이터"/"입력이미지"
+IMAGE_FILES={"camera":"camera.png","camera_rot90":"camera.png","chelsea":"chelsea.png",
+             "checkerboard":"checkerboard.png","moon":"moon.png","brick":"brick.png",
+             "coins":"coins.png","astronaut":"astronaut.png","boat":"boat.jpg",
+             "tank":"tank.png","pepper":"pepper.png"}
 def image_phase(name,path=None):
-    from skimage import data,color,transform,io,util
-    if name in ("custom","boat","tank","pepper"):
-        if path is None and name in ("boat","tank"):
-            path=Path(__file__).resolve().parents[1]/"데이터"/"입력이미지"/({"boat":"boat.jpg","tank":"tank.png"}[name])
+    from skimage import color,transform,io,util
+    if name not in IMAGE_MODELS: raise ValueError(name)
+    if name=="custom":
         if path is None: raise ValueError("This image requires --image-file PATH")
         a=io.imread(path)
-    elif name=="camera_rot90": a=np.rot90(data.camera())
-    else: a=getattr(data,name)()
+    elif name in ("boat","tank","pepper") and path is not None:
+        a=io.imread(path)
+    else:
+        a=io.imread(IMAGE_DIR/IMAGE_FILES[name])
+        if name=="camera_rot90": a=np.rot90(a)
     if a.ndim==3:
         if a.shape[-1]==4: a=color.rgba2rgb(a)
         a=color.rgb2gray(a)
