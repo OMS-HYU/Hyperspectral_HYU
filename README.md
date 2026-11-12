@@ -1,2 +1,31 @@
 # Hyperspectral_HYU
-single, multi, conti - spectral 
+
+Single-shot metasurface-based phase and hyperspectral reconstruction | Hanyang University ERICA.
+
+## Research tracks
+
+| Track | Entry point | Current status |
+|---|---|---|
+| Single (K=1) | `python -m single.run` | Known / experimental Blind; GD100 + periodic or spectral L-BFGS100; migrated integrated implementation, full inverse regression pending |
+| Multi (K=2–3) | `python -m multi.run` | full-grid incoherent forward and configuration; inverse is not yet implemented in this clean foundation |
+| Continuum | `python -m continuum.run` | quadrature and full-grid intensity forward; inverse is not yet implemented |
+
+One shared original B17 engine. Native propagation 3800², metasurface 1429², object 512², sensor 3000², input pitch 350 nm, camera 2 µm, z1 400 µm, z2 5 mm, wavelength 440–660 nm. Actual phase arrays are canonical [0, 2π). No ground truth is provided to an inverse.
+
+## Quick start
+
+```bash
+python -m pip install -r requirements.txt
+python -m tests.test_contract
+python -m single.run --help
+python -m multi.run --wavelengths 500 660 --weights 1 1 --output multi/results/K2_plan
+python -m continuum.run --start 440 --stop 660 --step 10 --output continuum/results/plan
+```
+
+Full optical runs require the original B17 ZIP at `datasets/B17/05_NN_metacam-main.zip` or the B17_ZIP environment variable. See [data instructions](datasets/B17/README.md). No surrogate replaces missing B17. Generated large output is excluded from Git. See [research status](docs/RESEARCH_PROGRESS.md), [experiment guide](docs/REPRODUCTION.md), and [data provenance](docs/DATA_SOURCES.md).
+
+## Historical benchmark, not a claim about the migrated solver
+
+660 nm synthetic independent 100-RBC, 50-group field: Spectral Periodic after fixed GD100 had ROI RMSE 0.077086 rad, full RMSE 0.029155 rad, 49/50 groups passing 0.15 rad. One group failed. See [benchmark](benchmarks/single_reference/README.md). Spatial-Spectral was not adopted. These results are from a historical experiment, not new full inverse verification.
+
+Source migration: original private repository MAIN 518e8932bf3b548acf1c1145820278edf385a6d7. Old repository retained unchanged; this repository has independent history. Third-party dataset rights are not granted by this README.
