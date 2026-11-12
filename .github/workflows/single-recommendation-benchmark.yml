@@ -1,0 +1,90 @@
+name: K1 recommendation full-grid benchmark
+on:
+  push:
+    branches:
+      - chatgpt/single-recommendation-benchmark-20261113
+    paths:
+      - '.github/workflows/single-recommendation-benchmark.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install -r requirements.txt
+      - run: python -m tests.test_contract
+      - run: python -m tests.test_single_method_routing
+      - name: Validate every selected input without optimizing
+        run: |
+          python - <<'PY'
+          from benchmarks.single_recommendation.run_case import SCENES,RBC
+          from 공통.object_models import image_phase,rbc_phase
+          from 공통.optics import phase_check
+          for scene in SCENES:
+              p=rbc_phase(scene,660,seed=20261127)["phase"] if scene in RBC else image_phase(scene)
+              phase_check(p)
+              print(scene, p.shape, float(p.min()), float(p.max()), flush=True)
+          PY
+  recover:
+    needs: preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      max-parallel: 12
+      matrix:
+        scene: ["normal","variable","tilt","double","triple","checkerboard","boat","tank","pepper","lena","barbara","house","starfish","monarch","airplane","parrot","man","couple","camera_set12","pepper_set12","boat_set12","mandrill","aerial","bark","brick_wall","electron_micrograph","motioncar","plane_c4l","random_texture","sand","stream","boat_c4l","tank_c4l"]
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      MPLBACKEND: Agg
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install -r requirements.txt
+      - name: Full B17 reconstruction, fixed recommended method
+        run: python -m benchmarks.single_recommendation.run_case case --scene "${{ matrix.scene }}" --output "benchmark-output/${{ matrix.scene }}"
+      - name: Upload metrics, phase arrays, logs and figures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: k1-${{ matrix.scene }}
+          path: benchmark-output/${{ matrix.scene }}/
+          if-no-files-found: warn
+          retention-days: 14
+  summary:
+    needs: [preflight, recover]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          pattern: k1-*
+          path: collected
+      - name: Aggregate all cases, including failures
+        run: python -m benchmarks.single_recommendation.run_case aggregate --input collected --output summary
+      - name: Upload consolidated report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: k1-summary
+          path: summary/
+          retention-days: 14
