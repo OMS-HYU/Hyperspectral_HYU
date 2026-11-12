@@ -22,6 +22,11 @@ class Contract(unittest.TestCase):
         self.assertGreaterEqual(int(idx.min()),0)
         self.assertLessEqual(int(idx.max()),240)
         print("Verified B17 MAT hashes:",b.inner_shas,flush=True)
+    def test_reference_contract(self):
+        from 싱글.코드.fixed_reference import ARCHIVE_SHA,SENSOR_SHA,GD_SHA,FINAL_SHA
+        for digest in (ARCHIVE_SHA,SENSOR_SHA,GD_SHA,FINAL_SHA):
+            self.assertEqual(len(digest),64)
+            self.assertEqual(len(bytes.fromhex(digest)),32)
     def test_single_rbc_only_cli(self):
         from 싱글.코드.solver import main
         from contextlib import redirect_stderr

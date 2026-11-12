@@ -7,3 +7,5 @@
 - R4: group31 실패 원인 및 개선. ground truth는 생성/평가에서만 사용.
 
 전체 광학 격자와 GD100+L-BFGS100 고정. 0~2π canonical. 피라미드는 기본 경로에서 제외. 성능, 계산량, hash, 실패 원인 기록.
+
+R0 실행: `python -m 싱글.run reference --archive PATH_TO_ORIGINAL_ZIP --output 싱글/결과/RBC_fixed_660`. 전체 재검증은 미실행.

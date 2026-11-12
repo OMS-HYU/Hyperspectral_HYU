@@ -200,6 +200,10 @@ def main(argv=None):
     p=argparse.ArgumentParser(description=__doc__)
     sub=p.add_subparsers(dest="command",required=True)
     g=sub.add_parser("generate");r=sub.add_parser("recover");e=sub.add_parser("evaluate");s=sub.add_parser("single")
+    h=sub.add_parser("reference",help="Regenerate exact historical 660 nm RBC sensor and run full GD100+Spectral100")
+    h.add_argument("--archive",type=Path,required=True)
+    h.add_argument("--output",type=Path,required=True)
+    h.add_argument("--generate-only",action="store_true")
     for a in (g,s):
         a.add_argument("--scene",choices=RBC_MODELS,default="triple")
         a.add_argument("--true-wavelength",type=float,default=660.)
@@ -221,7 +225,15 @@ def main(argv=None):
     if a.command=="evaluate":evaluate(a.truth,a.sensor,a.recovery);return
     with fft.set_workers(4):
         engine=FullB17()
-        if a.command=="generate":generate(engine,a.output,a.scene,a.true_wavelength,a.seed,a.geometry_seed)
+        if a.command=="reference":
+            from 싱글.코드.fixed_reference import generate_reference,compare_reference
+            a.output.mkdir(parents=True,exist_ok=False);obs=a.output/"observation";out=a.output/"inverse"
+            generate_reference(engine,a.archive,obs)
+            if not a.generate_only:
+                recover(engine,obs/"sensor_only.npz",out,"known",660.,"spectral")
+                evaluate(obs/"private_truth.npz",obs/"sensor_only.npz",out)
+                compare_reference(out)
+        elif a.command=="generate":generate(engine,a.output,a.scene,a.true_wavelength,a.seed,a.geometry_seed)
         elif a.command=="recover":recover(engine,a.sensor,a.output,a.mode,a.wavelength,a.method)
         else:
             a.output.mkdir(parents=True,exist_ok=False);obs=a.output/"observation";out=a.output/"inverse"
