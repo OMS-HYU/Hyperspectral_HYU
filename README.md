@@ -6,7 +6,7 @@ Single-shot metasurface-based phase and hyperspectral reconstruction | Hanyang U
 
 | Track | Entry point | Current status |
 |---|---|---|
-| Single (K=1) | `python -m 싱글.run` | RBC-only research; Full GD100 + Spectral Periodic L-BFGS100; known 660 nm baseline; new integrated inverse regression pending |
+| Single (K=1) | `python -m 싱글.run` | RBC research baseline: Full GD100 + Spectral Periodic L-BFGS100; general-image Pyramid64 candidate; auto/compare; integrated inverse regression pending |
 | Multi (K=2–3) | `python -m 멀티.run` | full-grid incoherent forward and configuration; inverse is not yet implemented in this clean foundation |
 | Continuum | `python -m 연속.run` | quadrature and full-grid intensity forward; inverse is not yet implemented |
 
@@ -18,7 +18,8 @@ One shared original B17 engine. Native propagation 3800², metasurface 1429², o
 python -m pip install -r requirements.txt
 python -m tests.test_contract --full-forward
 python -m 싱글.run single --output 싱글/결과/RBC_660
-# full synthetic RBC run; no pyramid
+# full synthetic RBC run; auto selects spectral
+python -m 싱글.run single --scene camera --method pyramid --output 싱글/결과/camera660
 python -m 멀티.run --wavelengths 500 660 --weights 1 1 --output 멀티/결과/K2_plan
 python -m 연속.run --start 440 --stop 660 --step 10 --output 연속/결과/plan
 ```
@@ -27,7 +28,7 @@ Original B17 calibration is included in the extracted `데이터/B17/05_NN_metac
 
 ## Single-track decision (2026-11-13)
 
-RBC phase recovery only. No Pyramid64 in the active solver. Full-resolution GD100 + Spectral Periodic L-BFGS100 is the baseline; the 250/300-step pyramid variants were tested at the same 660 nm sensor and did not improve ROI RMSE. Generic image data remain for multi/continuum and historical comparisons. See [decision and metrics](싱글/연구기록/개발방향.md).
+RBC remains the primary research track: Full-resolution GD100 + Spectral Periodic L-BFGS100 is its baseline; the 250/300-step pyramid variants did not improve RBC ROI RMSE. General images now select Pyramid64 by default; compare evaluates both on the same observation. The new port is not yet full-run validated. [Korean single guide](싱글/가이드북.md). See [decision and metrics](싱글/연구기록/개발방향.md).
 
 ## Historical benchmark, not a claim about the migrated solver
 
