@@ -27,12 +27,12 @@ class Contract(unittest.TestCase):
         for digest in (ARCHIVE_SHA,SENSOR_SHA,GD_SHA,FINAL_SHA):
             self.assertEqual(len(digest),64)
             self.assertEqual(len(bytes.fromhex(digest)),32)
-    def test_single_rbc_only_cli(self):
+    def test_single_cli_requires_custom_file(self):
         from 싱글.코드.solver import main
         from contextlib import redirect_stderr
         import io
         with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
-            main(["single","--scene","tank","--output","not_created"])
+            main(["single","--scene","custom","--output","not_created"])
         self.assertEqual(error.exception.code,2)
     def test_fixed_contract(self):
         self.assertEqual(GEOMETRY,(3800,1429,512,3000))
