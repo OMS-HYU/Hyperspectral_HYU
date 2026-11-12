@@ -272,7 +272,7 @@ def main(argv=None):
     if a.command in ("generate","single"):
         try:wavelength_check(a.true_wavelength)
         except ValueError as exc:p.error(str(exc))
-        if a.scene in ("custom","pepper") and a.image_file is None:
+        if a.scene=="custom" and a.image_file is None:
             p.error("This scene requires --image-file PATH")
     if a.command=="evaluate":evaluate_selected(a.truth,a.sensor,a.recovery);return
     with fft.set_workers(4):
