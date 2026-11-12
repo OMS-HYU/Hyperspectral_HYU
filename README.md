@@ -1,6 +1,6 @@
 # Hyperspectral_HYU
 
-**[🌐 싱글 명령어 생성기 바로 열기](https://htmlpreview.github.io/?https://github.com/OMS-HYU/Hyperspectral_HYU/blob/c6f888cbc463dbb5a33a6eeba51d95a073d63bc6/%EC%8B%B1%EA%B8%80/%EC%BD%94%EB%93%9C%EC%83%9D%EC%84%B1%EA%B8%B0/index.html)** · [오프라인 실행 및 HTML 파일](싱글/코드생성기/README.md)
+**[🌐 싱글 명령어 생성기 바로 열기](https://htmlpreview.github.io/?https://github.com/OMS-HYU/Hyperspectral_HYU/blob/27c65fa2f2e96a996451b4dee92a4459ee2f5484/%EC%8B%B1%EA%B8%80/%EC%BD%94%EB%93%9C%EC%83%9D%EC%84%B1%EA%B8%B0/index.html)** · [오프라인 실행 및 HTML 파일](싱글/코드생성기/README.md)
 
 
 Single-shot metasurface-based phase and hyperspectral reconstruction | Hanyang University ERICA.
@@ -28,6 +28,8 @@ python -m 연속.run --start 440 --stop 660 --step 10 --output 연속/결과/pla
 ```
 
 Original B17 calibration is included in the extracted `데이터/B17/05_NN_metacam-main/assets/data/Fab/B17/` directory. The loader verifies both original MAT SHA-256 values. A matching ZIP or explicit B17_SOURCE (B17_ZIP also accepted) is supported. See [data instructions](데이터/B17/README.md). No surrogate replaces missing B17. Generated large output is excluded from Git. See [research status](docs/RESEARCH_PROGRESS.md), [experiment guide](docs/REPRODUCTION.md), and [data provenance](docs/DATA_SOURCES.md).
+
+Input gallery: 35 general-image selections (including rotated and dataset-specific variants), plus five RBC models and custom images. See [asset registry and provenance](데이터/입력이미지/README.md).
 
 ## Single-track decision (2026-11-13)
 
