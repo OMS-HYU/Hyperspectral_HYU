@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""K=1 RBC research: full-resolution GD100 + Spectral Periodic L-BFGS100."""
+"""K=1 RBC and general image inverse, shared full-grid B17."""
 from __future__ import annotations
 import argparse,gc,json,time
 from pathlib import Path
 import numpy as np
 from scipy import fft
-from 공통.object_models import wrap,TAU,N,RBC_MODELS,SOURCES,rbc_phase
+from 공통.object_models import wrap,TAU,N,RBC_MODELS,IMAGE_MODELS,SOURCES,rbc_phase,image_phase
 from 공통.optics import GEOMETRY,ALPHA,GD_STEPS,LBFGS_STEPS,digest,write_json,phase_check,wavelength_check,FullB17
 
 def prior(p,alpha=ALPHA,gradient=True):
@@ -120,9 +120,27 @@ def fit(engine,y,w,dest,method="spectral"):
         **calls)
     write_json(dest/"recovery.json",result)
     return result
-def generate(engine,dest,scene,w,seed,geometry_seed=20261127):
+def resolve_method(method,scene=None,object_type=None):
+    """Auto is explicit specimen metadata, never inferred from private truth."""
+    if method != "auto":
+        return method
+    if scene is not None:
+        return "spectral" if scene in RBC_MODELS else "pyramid"
+    if object_type not in ("rbc","general"):
+        raise ValueError("Auto recover requires --object-type rbc or general")
+    return "spectral" if object_type=="rbc" else "pyramid"
+
+def fit_selected(engine,y,w,dest,method):
+    if method=="pyramid":
+        from 싱글.코드.pyramid import fit_pyramid
+        return fit_pyramid(engine,y,w,dest)
+    if method not in ("spectral","periodic"):
+        raise ValueError(f"Unknown concrete method: {method}")
+    return fit(engine,y,w,dest,method)
+
+def generate(engine,dest,scene,w,seed,geometry_seed=20261127,image_file=None):
     dest.mkdir(parents=True,exist_ok=False);w=wavelength_check(w)
-    truth=rbc_phase(scene,w,seed=geometry_seed)
+    truth=rbc_phase(scene,w,seed=geometry_seed) if scene in RBC_MODELS else {"phase":image_phase(scene,image_file)}
     truth["phase"]=wrap(truth["phase"]);phase_check(truth["phase"])
     clean=engine.predict(w,truth["phase"]);sigma=.01*float(clean.mean())
     y=np.maximum(0.,clean+sigma*np.random.default_rng(seed).standard_normal(clean.shape))
@@ -131,8 +149,8 @@ def generate(engine,dest,scene,w,seed,geometry_seed=20261127):
     write_json(dest/"generation.json",dict(scene=scene,seed=seed,geometry_seed=geometry_seed,noise_sigma=sigma,
         noise_pct_mean=1,geometry=list(GEOMETRY),phase_range=[0,float(TAU)],
         sensor_sha256=digest(y),B17_archive_sha256=engine.archive_sha,B17_source_fingerprint=engine.source_fingerprint,
-        B17_inner_shas=engine.inner_shas,sources=SOURCES,
-        model_assumption="660 nm Hb index contrast held constant at other wavelengths (nondispersive approximation)"))
+        B17_inner_shas=engine.inner_shas,sources=SOURCES if scene in RBC_MODELS else {},
+        model_assumption="660 nm Hb index contrast held constant at other wavelengths (nondispersive approximation)" if scene in RBC_MODELS else "grayscale phase"))
 def recover(engine,sensor,dest,mode,w,method):
     dest.mkdir(parents=True,exist_ok=False)
     with np.load(sensor,allow_pickle=False) as a:y=sensor_check(a["sensor"])
@@ -140,7 +158,17 @@ def recover(engine,sensor,dest,mode,w,method):
         if w is not None:raise ValueError("Blind mode must not receive true wavelength")
         w,ranking=scan_wavelength(engine,y);write_json(dest/"blind_scan.json",ranking)
     elif w is None:raise ValueError("Known mode requires wavelength")
-    result=fit(engine,y,w,dest,method)
+    if method=="compare":
+        results={}
+        for name in ("spectral","pyramid"):
+            child=dest/name;child.mkdir()
+            result=fit_selected(engine,y,w,child,name)
+            result.update(mode=mode,blind_experimental=mode=="blind")
+            write_json(child/"recovery.json",result)
+            results[name]=result
+        write_json(dest/"comparison_recovery.json",results)
+        return results
+    result=fit_selected(engine,y,w,dest,method)
     result["mode"]=mode;result["blind_experimental"]=mode=="blind"
     write_json(dest/"recovery.json",result)
     return result
@@ -165,7 +193,7 @@ def evaluate(truth_path,sensor_path,recovered_dir):
     l2=float(np.linalg.norm(pred-y)/np.linalg.norm(y))
     metrics=dict(full_rmse_rad=rms(err),sensor_l2=l2,actual_wavelength_nm=w,
         estimated_wavelength_nm=est,wavelength_error_nm=abs(est-w),offset_rad=off,
-        completed=audit["completed"],mode=audit["mode"],gd_iterations=audit["gd_iterations"],
+        completed=audit["completed"],mode=audit["mode"],method=audit["method"],gd_iterations=audit["gd_iterations"],
         lbfgs_iterations=audit["lbfgs_iterations"])
     phase_pass=metrics["full_rmse_rad"]<=.15
     if labels is not None:
@@ -193,9 +221,22 @@ def evaluate(truth_path,sensor_path,recovered_dir):
     for ax in axs:ax.axis("off")
     fig.savefig(recovered_dir/"five_panel.png",dpi=125);plt.close(fig)
     hist=json.loads((recovered_dir/"history.json").read_text())
-    fig,ax=plt.subplots(figsize=(8,4));ax.semilogy([i+(100 if a["stage"]=="LBFGS" else 0) for i,a in [(v["iteration"],v) for v in hist]],[v["sensor_l2"] for v in hist]);ax.set(xlabel="Accepted update",ylabel="Sensor relative L2");fig.savefig(recovered_dir/"convergence.png",dpi=125);plt.close(fig)
+    points=[v for v in hist if "sensor_l2" in v]
+    fig,ax=plt.subplots(figsize=(8,4))
+    ax.semilogy([v["iteration"]+(audit["gd_iterations"] if v["stage"]=="LBFGS" else 0) for v in points],
+                [max(v["sensor_l2"],1e-30) for v in points],marker=".")
+    ax.set(xlabel="Accepted update",ylabel="Sensor relative L2 (recorded points)")
+    fig.savefig(recovered_dir/"convergence.png",dpi=125);plt.close(fig)
     print("EVALUATED",json.dumps(metrics),flush=True)
     return metrics
+def evaluate_selected(truth_path,sensor_path,recovered_dir):
+    if (recovered_dir/"comparison_recovery.json").is_file():
+        results={name:evaluate(truth_path,sensor_path,recovered_dir/name)
+                 for name in ("spectral","pyramid")}
+        write_json(recovered_dir/"comparison_evaluation.json",results)
+        return results
+    return evaluate(truth_path,sensor_path,recovered_dir)
+
 def main(argv=None):
     p=argparse.ArgumentParser(description=__doc__)
     sub=p.add_subparsers(dest="command",required=True)
@@ -205,14 +246,16 @@ def main(argv=None):
     h.add_argument("--output",type=Path,required=True)
     h.add_argument("--generate-only",action="store_true")
     for a in (g,s):
-        a.add_argument("--scene",choices=RBC_MODELS,default="triple")
+        a.add_argument("--scene",choices=RBC_MODELS+IMAGE_MODELS,default="triple")
+        a.add_argument("--image-file",type=Path)
         a.add_argument("--true-wavelength",type=float,default=660.)
         a.add_argument("--seed",type=int,default=672906)
         a.add_argument("--geometry-seed",type=int,default=20261127)
     for a in (r,s):
         a.add_argument("--mode",choices=("known","blind"),default="known")
         a.add_argument("--wavelength",type=float,help="Known inverse wavelength; forbidden for blind")
-        a.add_argument("--method",choices=("spectral","periodic"),default="spectral",help="Spectral is the active RBC baseline; periodic is comparison only")
+        a.add_argument("--method",choices=("auto","spectral","periodic","pyramid","compare"),default="auto" if a is s else "spectral")
+    r.add_argument("--object-type",choices=("rbc","general"),help="Explicit specimen category for auto recover")
     for a in (g,r,s):a.add_argument("--output",type=Path,required=True)
     r.add_argument("--sensor",type=Path,required=True)
     e.add_argument("--truth",type=Path,required=True);e.add_argument("--sensor",type=Path,required=True);e.add_argument("--recovery",type=Path,required=True)
@@ -222,7 +265,16 @@ def main(argv=None):
         if a.mode=="known" and a.wavelength is None:
             if a.command=="single":a.wavelength=a.true_wavelength
             else:p.error("Known recover requires --wavelength")
-    if a.command=="evaluate":evaluate(a.truth,a.sensor,a.recovery);return
+        try:
+            a.method=resolve_method(a.method,scene=getattr(a,"scene",None),object_type=getattr(a,"object_type",None))
+            if a.wavelength is not None:wavelength_check(a.wavelength)
+        except ValueError as exc:p.error(str(exc))
+    if a.command in ("generate","single"):
+        try:wavelength_check(a.true_wavelength)
+        except ValueError as exc:p.error(str(exc))
+        if a.scene in ("custom","pepper") and a.image_file is None:
+            p.error("This scene requires --image-file PATH")
+    if a.command=="evaluate":evaluate_selected(a.truth,a.sensor,a.recovery);return
     with fft.set_workers(4):
         engine=FullB17()
         if a.command=="reference":
@@ -233,11 +285,11 @@ def main(argv=None):
                 recover(engine,obs/"sensor_only.npz",out,"known",660.,"spectral")
                 evaluate(obs/"private_truth.npz",obs/"sensor_only.npz",out)
                 compare_reference(out)
-        elif a.command=="generate":generate(engine,a.output,a.scene,a.true_wavelength,a.seed,a.geometry_seed)
+        elif a.command=="generate":generate(engine,a.output,a.scene,a.true_wavelength,a.seed,a.geometry_seed,a.image_file)
         elif a.command=="recover":recover(engine,a.sensor,a.output,a.mode,a.wavelength,a.method)
         else:
             a.output.mkdir(parents=True,exist_ok=False);obs=a.output/"observation";out=a.output/"inverse"
-            generate(engine,obs,a.scene,a.true_wavelength,a.seed,a.geometry_seed)
+            generate(engine,obs,a.scene,a.true_wavelength,a.seed,a.geometry_seed,a.image_file)
             recover(engine,obs/"sensor_only.npz",out,a.mode,a.wavelength,a.method)
-            evaluate(obs/"private_truth.npz",obs/"sensor_only.npz",out)
+            evaluate_selected(obs/"private_truth.npz",obs/"sensor_only.npz",out)
 if __name__=="__main__":main()
