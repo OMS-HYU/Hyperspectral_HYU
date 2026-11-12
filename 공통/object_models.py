@@ -7,7 +7,8 @@ N=512
 PITCH_UM=.35
 C=(.207161,2.002558,-1.122762)
 RBC_MODELS=("normal","variable","tilt","double","triple")
-IMAGE_MODELS=("camera","camera_rot90","moon","brick","chelsea","coins","checkerboard","astronaut","boat","tank","pepper","custom")
+EXTRA_IMAGE_MODELS=("lena","barbara","house","starfish","monarch","airplane","parrot","man","couple","camera_set12","pepper_set12","boat_set12","mandrill","aerial","bark","brick_wall","electron_micrograph","motioncar","plane_c4l","random_texture","sand","stream","boat_c4l","tank_c4l")
+IMAGE_MODELS=("camera","camera_rot90","moon","brick","chelsea","coins","checkerboard","astronaut","boat","tank","pepper","custom")+EXTRA_IMAGE_MODELS
 SOURCES={
  "shape":"Evans & Fung 1972, doi:10.1016/0026-2862(72)90069-6; Dao et al. 2003, Eq.7a,b, doi:10.1016/j.jmps.2003.09.019",
  "index":"Ahmad et al. 2020, doi:10.1117/1.JBO.25.11.116501 (RBC 1.40, PBS 1.33)",
@@ -20,6 +21,7 @@ IMAGE_FILES={"camera":"camera.png","camera_rot90":"camera.png","chelsea":"chelse
              "checkerboard":"checkerboard.png","moon":"moon.png","brick":"brick.png",
              "coins":"coins.png","astronaut":"astronaut.png","boat":"boat.jpg",
              "tank":"tank.png","pepper":"pepper.png"}
+IMAGE_FILES.update({name:name+".png" for name in EXTRA_IMAGE_MODELS})
 def image_phase(name,path=None):
     from skimage import color,transform,io,util
     if name not in IMAGE_MODELS: raise ValueError(name)
