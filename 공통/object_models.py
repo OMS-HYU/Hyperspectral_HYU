@@ -7,7 +7,7 @@ N=512
 PITCH_UM=.35
 C=(.207161,2.002558,-1.122762)
 RBC_MODELS=("normal","variable","tilt","double","triple")
-IMAGE_MODELS=("camera","camera_rot90","moon","brick","chelsea","coins","boat","tank","pepper","custom")
+IMAGE_MODELS=("camera","camera_rot90","moon","brick","chelsea","coins","checkerboard","astronaut","boat","tank","pepper","custom")
 SOURCES={
  "shape":"Evans & Fung 1972, doi:10.1016/0026-2862(72)90069-6; Dao et al. 2003, Eq.7a,b, doi:10.1016/j.jmps.2003.09.019",
  "index":"Ahmad et al. 2020, doi:10.1117/1.JBO.25.11.116501 (RBC 1.40, PBS 1.33)",
