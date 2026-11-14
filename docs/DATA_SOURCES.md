@@ -1,3 +1,0 @@
-# Data and source provenance
-
-Original private source snapshot: 518e8932bf3b548acf1c1145820278edf385a6d7. Source selected, shared optics consolidated, no old commit history copied. B17 physical hash contract in 공통/b17_loader.py; original archive under 데이터/B17. Tank: https://sipi.usc.edu/database/misc/7.1.03.tiff; see 데이터/입력이미지/tank_source.md. Cameraman and Boat source copies retain exact bytes; redistribution rights are not asserted. Synthetic RBC: Evans & Fung 1972 doi:10.1016/0026-2862(72)90069-6; Dao et al. 2003 doi:10.1016/j.jmps.2003.09.019; Ahmad 2020 doi:10.1117/1.JBO.25.11.116501; Park 2009 doi:10.1364/OL.34.003668; Park 2008 doi:10.1073/pnas.0806100105. No measured QPI claim.
