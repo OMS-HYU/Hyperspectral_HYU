@@ -20,12 +20,8 @@ GRIDS=(3800,4800,5700)
 CASES={(3800,3800),(4800,4800),(5700,5700),(5700,3800),(5700,4800)}
 
 def set_grid(n):
-    assert n in GRIDS
-    geometry=(n,1429,512,3000)
-    # Only experiment-process configuration; original production files untouched.
-    optics.GEOMETRY=geometry
-    solver.GEOMETRY=geometry
-    jac.GEOMETRY=geometry
+    # Compatibility helper for the existing geometry-contract workflow.
+    return optics.geometry_for(n)
 
 def grid_spec(n):
     dx=350e-9;z=.005;pitch=W*1e-9*z/(n*dx)
@@ -62,8 +58,7 @@ def main():
     obs=a.output/"observation";shared=a.output/"shared_gd";shared.mkdir()
     t=time.monotonic()
     with fft.set_workers(4):
-        set_grid(a.source_grid)
-        engine=FullB17()
+        engine=FullB17(a.source_grid)
         solver.generate(engine,obs,"camera",W,SEED,20261127)
         with np.load(obs/"sensor_only.npz",allow_pickle=False) as z:
             y=solver.sensor_check(z["sensor"])
@@ -71,7 +66,7 @@ def main():
         # Source grid is explicitly recorded before changing the inverse geometry.
         generation=json.loads((obs/"generation.json").read_text())
         assert generation["geometry"][0]==a.source_grid
-        set_grid(a.inverse_grid)
+        engine=FullB17(a.inverse_grid)
         m,cam=engine.optics(W)
         assert m.c.propagation_n==a.inverse_grid and m.c.sensor_n==a.inverse_grid
         assert m.c.meta_n==1429 and m.c.object_n==512
@@ -111,11 +106,10 @@ def main():
         clean_fit=engine.predict(W,truth)
         fit_clean_sha=digest(clean_fit)
         fit_vs_obs,q=profile_l2(clean_fit,y)
-        set_grid(a.source_grid)
         if a.source_grid==a.inverse_grid:
             clean_src=clean_fit
         else:
-            clean_src=engine.predict(W,truth)
+            clean_src=FullB17(a.source_grid).predict(W,truth)
         discrepancy,gain=profile_l2(clean_fit,clean_src)
         source_noise_l2=float(np.linalg.norm(clean_src-y)/np.linalg.norm(clean_src))
         diag=dict(source_grid=a.source_grid,inverse_grid=a.inverse_grid,
