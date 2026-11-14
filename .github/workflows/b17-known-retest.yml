@@ -1,0 +1,93 @@
+name: B17 K1 Known retest (full native optics)
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [chatgpt/single-method-routing-20261113]
+    paths: ['.github/workflows/b17-known-retest.yml']
+permissions:
+  contents: read
+jobs:
+  known:
+    if: github.head_ref == 'chatgpt/known-retest-20261114'
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        include:
+          - {scene: bark, nm: 660, method: compare}
+          - {scene: sand, nm: 660, method: compare}
+          - {scene: grass, nm: 500, method: compare}
+          - {scene: gravel, nm: 470, method: pyramid}
+          - {scene: boat, nm: 550, method: pyramid}
+          - {scene: pepper, nm: 550, method: pyramid}
+          - {scene: tank, nm: 550, method: pyramid}
+          - {scene: rot270, nm: 550, method: pyramid}
+          - {scene: stream, nm: 660, method: spectral}
+          - {scene: mandrill, nm: 660, method: spectral}
+          - {scene: barbara, nm: 660, method: spectral}
+          - {scene: brick_wall, nm: 660, method: spectral}
+          - {scene: random_texture, nm: 660, method: spectral}
+          - {scene: triple, nm: 660, method: spectral}
+    env:
+      SCENE: ${{ matrix.scene }}
+      NM: ${{ matrix.nm }}
+      METHOD: ${{ matrix.method }}
+      OMP_NUM_THREADS: '4'
+      OPENBLAS_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      MPLBACKEND: Agg
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install locked project requirements
+        run: python -m pip install -r requirements.txt
+      - name: Prepare exact scene source and run full K1
+        shell: bash
+        run: |
+          set -euo pipefail
+          args=(--scene "$SCENE")
+          if [[ "$SCENE" == grass || "$SCENE" == gravel || "$SCENE" == rot270 ]]; then
+            python - <<'PY'
+          import os
+          from pathlib import Path
+          import numpy as np
+          from skimage import data, io
+          name = os.environ["SCENE"]
+          a = np.rot90(io.imread("데이터/입력이미지/camera.png"), 3) if name == "rot270" else getattr(data,name)()
+          assert a.dtype == np.uint8
+          io.imsave("retest_input.png", a, check_contrast=False)
+          PY
+            args=(--scene custom --image-file retest_input.png)
+          fi
+          python -m 싱글.run single "${args[@]}" --true-wavelength "$NM" --mode known --wavelength "$NM" --method "$METHOD" --seed 672906 --geometry-seed 20261127 --output retest
+      - name: Preserve evaluation, figures, and provenance only
+        if: always()
+        shell: bash
+        run: |
+          python - <<'PY'
+          import os,json,shutil,hashlib
+          from pathlib import Path
+          root=Path("retest")
+          out=Path("published");out.mkdir(exist_ok=True)
+          source=Path("retest_input.png") if Path("retest_input.png").exists() else Path("데이터/입력이미지")/(os.environ["SCENE"]+(".jpg" if os.environ["SCENE"]=="boat" else ".png"))
+          meta={"scene":os.environ["SCENE"],"wavelength_nm":int(os.environ["NM"]),"method":os.environ["METHOD"],"seed":672906,"geometry_seed":20261127,"mode":"known","commit":os.environ["GITHUB_SHA"],"geometry":[3800,1429,512,3000],"phase_rmse_gate_rad":0.15,"sensor_l2_gate_fraction":0.025,"independent_new_observation":True,"source_sha256":hashlib.sha256(source.read_bytes()).hexdigest() if source.is_file() else None}
+          (out/"case.json").write_text(json.dumps(meta,indent=2))
+          allowed={"generation.json","recovery.json","evaluation.json","history.json","comparison_recovery.json","comparison_evaluation.json","five_panel.png","convergence.png"}
+          if root.is_dir():
+              for p in root.rglob("*"):
+                  if p.is_file() and p.name in allowed:
+                      q=out/p.relative_to(root);q.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(p,q)
+          for p in out.rglob("evaluation.json"):
+              print("FINAL",p,json.loads(p.read_text()))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: known-${{ matrix.scene }}-${{ matrix.nm }}-${{ matrix.method }}
+          path: published/
+          retention-days: 30
+          if-no-files-found: error
