@@ -15,7 +15,7 @@ from 싱글.코드.grid_convergence import spectrum_error
 
 BASELINE_RUN=43609194176
 BASELINE_RMSE=.09272863035423533
-ALPHAS=(.005,.003,.001,.0003)
+ALPHAS=(.005,.003,.001,.0003,.0001,0.)
 def main():
     p=argparse.ArgumentParser()
     p.add_argument("--alpha",type=float,choices=ALPHAS,required=True)
