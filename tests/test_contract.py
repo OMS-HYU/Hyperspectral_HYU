@@ -8,7 +8,7 @@ import sys,unittest
 import numpy as np
 from scipy import fft
 from 공통.object_models import N,TAU,wrap,image_phase,rbc_phase
-from 공통.optics import GEOMETRY,GD_STEPS,LBFGS_STEPS,ALPHA,FullB17,phase_check,wavelength_check
+from 공통.optics import GEOMETRY,GD_STEPS,LBFGS_STEPS,ALPHA,FullB17,phase_check,wavelength_check,geometry_for,grid_details,propagation_grid
 from 싱글.코드.solver import prior,preconditioner
 from 공통.spectrum_forward import multi_plan,continuum_plan,summed_forward
 
@@ -46,6 +46,22 @@ class Contract(unittest.TestCase):
             with self.assertRaises(ValueError): wavelength_check(w)
         with self.assertRaises(ValueError):phase_check(np.zeros((128,128)))
         with self.assertRaises(ValueError):phase_check(np.full((N,N),-.01))
+    def test_variable_grid_fixed_physics(self):
+        for n in (3800,4800,5700,7600):
+            self.assertEqual(geometry_for(n),(n,1429,512,3000))
+            d=grid_details(n,660)
+            self.assertEqual((d["input_pitch_m"],d["object_meta_m"],d["meta_sensor_m"],d["camera_pitch_m"]),(350e-9,400e-6,.005,2e-6))
+            self.assertAlmostEqual(d["output_window_m"],.009428571428571429)
+            self.assertEqual(d["resampling"],"upsampling" if n==3800 else "downsampling")
+            self.assertEqual(multi_plan([440,660],[1,1],n)["geometry"],list(geometry_for(n)))
+            self.assertEqual(continuum_plan(440,660,110,n)["geometry"],list(geometry_for(n)))
+        for n in (1000,3801,4800.5,True):
+            with self.assertRaises(ValueError):propagation_grid(n)
+        # Instance construction must not mutate another engine or the default.
+        a=FullB17(3800);b=FullB17(4800)
+        self.assertEqual(a.geometry,(3800,1429,512,3000))
+        self.assertEqual(b.geometry,(4800,1429,512,3000))
+        self.assertEqual(GEOMETRY,(3800,1429,512,3000))
     def test_circular_prior_and_preconditioner(self):
         rng=np.random.default_rng(19)
         p=rng.uniform(0,TAU,(N,N));v=rng.normal(size=p.shape)

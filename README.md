@@ -40,3 +40,15 @@ RBC remains the primary research track: Full-resolution GD100 + Spectral Periodi
 660 nm synthetic independent 100-RBC, 50-group field: Spectral Periodic after fixed GD100 had ROI RMSE 0.077086 rad, full RMSE 0.029155 rad, 49/50 groups passing 0.15 rad. One group failed. See [benchmark](benchmarks/single_reference/README.md). Spatial-Spectral was not adopted. These results are from a historical experiment, not new full inverse verification.
 
 Source migration: original private repository MAIN 518e8932bf3b548acf1c1145820278edf385a6d7. Old repository retained unchanged; this repository has independent history. Third-party dataset rights are not granted by this README.
+
+## Numerical grid policy (2026-11-14)
+
+The B17 original LUT/width map, centered 1429² metasurface, 512² object, 350 nm input pitch, 400 µm object–metasurface distance, 5 mm metasurface–sensor distance, and 3000² sensor with 2 µm pitch remain fixed. Do not change the physical system without explicit approval. Only the numerical propagation grid N (even integer, validated against fixed camera coverage) may be changed independently. 3800 is the historical default, not a claim of numerical convergence. No automatic wavelength-dependent grid selection is enabled; convergence tests determine the appropriate N. Use the same chosen N in forward and inverse unless a cross-grid diagnostic is explicitly intended. The historical byte-exact replay remains locked to 3800. Every current single generation/recovery and spectral plan records its selected grid.
+
+```bash
+python -m 싱글.run single --scene camera --true-wavelength 660 --propagation-n 4800 --output 싱글/결과/camera660_N4800
+python -m 멀티.run --wavelengths 440 660 --weights 1 1 --propagation-n 5700 --output 멀티/결과/plan_N5700
+python -m 연속.run --start 440 --stop 660 --step 10 --propagation-n 5700 --output 연속/결과/plan_N5700
+```
+
+Python: `FullB17(propagation_n=4800)`. The grid setting is per engine; it does not mutate the physical system or other engines. Multi/continuum entry points in this shared foundation implement plans and forward only; separate historical inverse experiments are not silently modified.

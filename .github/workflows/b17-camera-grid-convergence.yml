@@ -44,9 +44,9 @@ jobs:
           from 싱글.코드.grid_convergence import grid_spec, GRIDS, set_grid
           from 공통 import optics
           for n in GRIDS:
-              set_grid(n)
+              assert set_grid(n)==(n,1429,512,3000)
               s=grid_spec(n)
-              assert optics.GEOMETRY==(n,1429,512,3000)
+              assert optics.geometry_for(n)==(n,1429,512,3000)
               assert abs(s["output_width_m"]-0.009428571428571429)<1e-12
               assert s["camera_width_m"]==.006
               assert s["camera_resampling"]==("upsampling" if n==3800 else "downsampling")

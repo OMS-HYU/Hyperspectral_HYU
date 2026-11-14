@@ -7,9 +7,9 @@ from __future__ import annotations
 import argparse,json
 from pathlib import Path
 import numpy as np
-from 공통.optics import FullB17,GEOMETRY,phase_check,wavelength_check,digest
+from 공통.optics import FullB17,GEOMETRY,phase_check,wavelength_check,digest,geometry_for,propagation_grid,DEFAULT_PROPAGATION_N,grid_details
 
-def multi_plan(wavelengths,weights):
+def multi_plan(wavelengths,weights,propagation_n=DEFAULT_PROPAGATION_N):
     w=np.asarray(wavelengths,float);a=np.asarray(weights,float)
     if w.ndim!=1 or len(w) not in (2,3) or len(set(w.tolist()))!=len(w):
         raise ValueError("Multi foundation requires K=2 or 3 distinct wavelengths")
@@ -17,9 +17,9 @@ def multi_plan(wavelengths,weights):
         raise ValueError("One positive finite spectral weight per wavelength")
     for v in w:wavelength_check(v)
     return {"mode":"multi","K":len(w),"wavelengths_nm":w.tolist(),"weights":a.tolist(),
-            "geometry":list(GEOMETRY),"truth_parameterization":"independent-phase-v2",
+            "geometry":list(geometry_for(propagation_n)),"truth_parameterization":"independent-phase-v2",
             "inverse_status":"not implemented in unified foundation"}
-def continuum_plan(start,stop,step):
+def continuum_plan(start,stop,step,propagation_n=DEFAULT_PROPAGATION_N):
     start=wavelength_check(start);stop=wavelength_check(stop);step=float(step)
     if not (start<stop and np.isfinite(step) and step>0):raise ValueError("Invalid continuum interval or step")
     n=int(np.ceil((stop-start)/step))
@@ -27,12 +27,14 @@ def continuum_plan(start,stop,step):
     w=np.linspace(start,stop,n+1);h=(stop-start)/n
     a=np.full(n+1,h);a[[0,-1]]*=.5
     return {"mode":"continuum","K":None,"wavelengths_nm":w.tolist(),
-            "weights":a.tolist(),"geometry":list(GEOMETRY),
+            "weights":a.tolist(),"geometry":list(geometry_for(propagation_n)),
             "quadrature":"trapezoid; weights in nm; uniform unit spectral density default",
             "inverse_status":"not implemented in unified foundation"}
 def summed_forward(engine,plan,phases,density=None):
     """Sum intensities, never complex fields. No truth access inside any inverse."""
     w=plan["wavelengths_nm"];a=np.asarray(plan["weights"],float)
+    if hasattr(engine,"geometry") and list(engine.geometry)!=plan["geometry"]:
+        raise ValueError("Engine and spectral plan propagation grids differ")
     if len(phases)!=len(w):raise ValueError("One native phase array per spectral node")
     if density is not None:
         if plan["mode"]!="continuum":raise ValueError("Density only for continuum")
@@ -50,15 +52,20 @@ def main(argv=None):
     c=s.add_parser("continuum");c.add_argument("--start",type=float,default=440);c.add_argument("--stop",type=float,default=660);c.add_argument("--step",type=float,default=10)
     for a in (m,c):
         a.add_argument("--output",type=Path,required=True)
+        a.add_argument("--propagation-n",type=int,default=DEFAULT_PROPAGATION_N,help="Numerical FFT grid only; physical system fixed")
         a.add_argument("--phases",type=Path,help="Optional NPZ phases[Nnodes,512,512], runs full forward only")
     a=p.parse_args(argv)
-    plan=multi_plan(a.wavelengths,a.weights) if a.mode=="multi" else continuum_plan(a.start,a.stop,a.step)
+    try:
+        n=propagation_grid(a.propagation_n)
+        plan=multi_plan(a.wavelengths,a.weights,n) if a.mode=="multi" else continuum_plan(a.start,a.stop,a.step,n)
+    except ValueError as exc:p.error(str(exc))
+    plan["grid_by_wavelength"]=[grid_details(n,w) for w in plan["wavelengths_nm"]]
     a.output.mkdir(parents=True,exist_ok=False)
     if a.phases:
         with np.load(a.phases,allow_pickle=False) as z:
             phases=z["phases"];density=z["density"] if "density" in z else None
             from scipy import fft
-            with fft.set_workers(4):y=summed_forward(FullB17(),plan,phases,density)
+            with fft.set_workers(4):y=summed_forward(FullB17(n),plan,phases,density)
         np.savez_compressed(a.output/"sensor_only.npz",sensor=y)
         plan["sensor_sha256"]=digest(y);plan["forward_completed"]=True
     else:plan["forward_completed"]=False
