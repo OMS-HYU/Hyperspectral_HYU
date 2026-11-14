@@ -1,0 +1,60 @@
+name: B17 optical stage transfer diagnostic
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [chatgpt/camera-gauss-newton-20261114]
+    paths:
+      - '.github/workflows/b17-camera-stage-transfer.yml'
+      - '싱글/코드/stage_transfer.py'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  compare:
+    if: github.head_ref == 'chatgpt/camera-stage-transfer-20261114'
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        wavelength: [440, 550, 660]
+    env:
+      WAVELENGTH: ${{ matrix.wavelength }}
+      OMP_NUM_THREADS: '4'
+      OPENBLAS_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      MPLBACKEND: Agg
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Retrieve best sealed recovery
+        uses: actions/download-artifact@v4
+        with:
+          name: camera660-regularization-alpha005
+          run-id: '43604536423'
+          github-token: ${{ github.token }}
+          path: best
+      - name: Retrieve clean low-residual recovery
+        uses: actions/download-artifact@v4
+        with:
+          name: camera660-gn-LBFGS_clean
+          run-id: '43606880549'
+          github-token: ${{ github.token }}
+          path: low-residual
+      - name: Validate diagnostic
+        run: python -m py_compile 싱글/코드/stage_transfer.py
+      - name: Measure stage transfer and exact residual paths
+        run: python -m 싱글.코드.stage_transfer --wavelength "$WAVELENGTH" --best best --low-residual low-residual --output experiment
+      - name: Publish diagnostic
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: camera-stage-transfer-${{ matrix.wavelength }}nm
+          path: experiment/
+          retention-days: 30
+          if-no-files-found: warn
