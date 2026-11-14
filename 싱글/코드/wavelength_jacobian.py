@@ -133,7 +133,7 @@ def refine(engine,y,w,start,dest,alpha,init_label,P,method,source):
         gd_iterations=150,lbfgs_iterations=accepted,completed=accepted==BUDGET,
         termination=reason,sensor_l2=float(np.sqrt(loss)),sensor_sha256=digest(y),
         phase_sha256=digest(phase),initial_phase_sha256=start_sha,initialization=init_label,
-        geometry=list(GEOMETRY),B17_archive_sha256=engine.archive_sha,
+        geometry=list(engine.geometry),B17_archive_sha256=engine.archive_sha,
         B17_source_fingerprint=engine.source_fingerprint,B17_inner_shas=engine.inner_shas,
         alpha=alpha,phase_range=[0,float(2*np.pi)],truth_in_inverse=False,
         spectral_preconditioner_source=source,**counts)
