@@ -1,0 +1,86 @@
+name: B17 Cameraman 660 nm padding convergence
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [chatgpt/cameraman-wavelength-jacobian-20261114]
+    paths:
+      - '.github/workflows/b17-camera-grid-convergence.yml'
+      - '싱글/코드/grid_convergence.py'
+permissions:
+  contents: read
+jobs:
+  compare:
+    if: github.head_ref == 'chatgpt/camera-grid-convergence-20261114'
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        include:
+          - {source: 3800, inverse: 3800}
+          - {source: 4800, inverse: 4800}
+          - {source: 5700, inverse: 5700}
+          - {source: 5700, inverse: 3800}
+          - {source: 5700, inverse: 4800}
+    env:
+      SOURCE_GRID: ${{ matrix.source }}
+      INVERSE_GRID: ${{ matrix.inverse }}
+      OMP_NUM_THREADS: '4'
+      OPENBLAS_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      MPLBACKEND: Agg
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install original dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Verify experiment geometry contract
+        run: |
+          python -m py_compile 싱글/코드/grid_convergence.py
+          python - <<'PY'
+          from 싱글.코드.grid_convergence import grid_spec, GRIDS, set_grid
+          from 공통 import optics
+          for n in GRIDS:
+              set_grid(n)
+              s=grid_spec(n)
+              assert optics.GEOMETRY==(n,1429,512,3000)
+              assert abs(s["output_width_m"]-0.009428571428571429)<1e-12
+              assert s["camera_width_m"]==.006
+              assert s["camera_resampling"]==("upsampling" if n==3800 else "downsampling")
+              print(s)
+          PY
+      - name: Run controlled padding comparison
+        run: python -m 싱글.코드.grid_convergence --source-grid "$SOURCE_GRID" --inverse-grid "$INVERSE_GRID" --output experiment
+      - name: Preserve evidence and figures
+        if: always()
+        run: |
+          python - <<'PY'
+          import json,os,shutil
+          from pathlib import Path
+          root=Path("experiment");out=Path("published");out.mkdir(exist_ok=True)
+          (out/"case.json").write_text(json.dumps(dict(scene="camera",wavelength_nm=660,source_grid=int(os.environ["SOURCE_GRID"]),inverse_grid=int(os.environ["INVERSE_GRID"]),commit=os.environ["GITHUB_SHA"]),indent=2))
+          names={"experiment.json","diagnostics.json","generation.json","summary.json","recovery.json","evaluation.json","history.json","five_panel.png","convergence.png","sealed.npz","recovered.npz"}
+          if root.is_dir():
+              for p in root.rglob("*"):
+                  if p.is_file() and p.name in names:
+                      q=out/p.relative_to(root);q.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(p,q)
+          if (root/"diagnostics.json").is_file():
+              e=json.loads((root/"experiment.json").read_text())
+              g=json.loads((root/"observation/generation.json").read_text())
+              r=json.loads((root/"inverse/recovery.json").read_text())
+              d=json.loads((root/"diagnostics.json").read_text())
+              assert e["sensor_sha256"]==g["sensor_sha256"]==r["sensor_sha256"]==d["same_observation_sha256"]
+              assert g["geometry"][0]==int(os.environ["SOURCE_GRID"])
+              assert r["geometry"][0]==int(os.environ["INVERSE_GRID"])
+              print("SEALED GRID AUDIT PASSED")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: camera660-source-${{ matrix.source }}-inverse-${{ matrix.inverse }}
+          path: published/
+          retention-days: 30
+          if-no-files-found: error
