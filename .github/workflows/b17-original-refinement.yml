@@ -1,0 +1,79 @@
+name: B17 original geometry refinement
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [chatgpt/b17-original-geometry-20261115]
+    paths:
+      - '.github/workflows/b17-original-refinement.yml'
+      - '싱글/코드/original_alpha.py'
+      - '싱글/코드/original_geometry.py'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  compare:
+    if: github.head_ref == 'chatgpt/b17-original-refinement-20261115'
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        include:
+          - {case: alpha005, alpha: '0.005', kind: alpha}
+          - {case: alpha003, alpha: '0.003', kind: alpha}
+          - {case: alpha001, alpha: '0.001', kind: alpha}
+          - {case: alpha0003, alpha: '0.0003', kind: alpha}
+          - {case: original440_BL05, kind: full}
+          - {case: original550_BL05, kind: full}
+    env:
+      CASE: ${{ matrix.case }}
+      ALPHA: ${{ matrix.alpha }}
+      OMP_NUM_THREADS: '4'
+      OPENBLAS_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      MPLBACKEND: Agg
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Retrieve sealed original BL05 baseline
+        if: matrix.kind == 'alpha'
+        uses: actions/download-artifact@v4
+        with:
+          name: b17-original-original660_BL05
+          run-id: '43609194176'
+          github-token: ${{ github.token }}
+          path: baseline
+      - name: Validate code
+        run: python -m py_compile 싱글/코드/original_alpha.py 싱글/코드/original_geometry.py
+      - name: Run same-start equal-budget continuation
+        if: matrix.kind == 'alpha'
+        run: python -m 싱글.코드.original_alpha --alpha "$ALPHA" --baseline baseline --output experiment
+      - name: Run 440 or 550 nm original BL05 profile
+        if: matrix.kind == 'full'
+        run: python -m 싱글.코드.original_geometry --case "$CASE" --output experiment
+      - name: Preserve diagnostics and figures
+        if: always()
+        run: |
+          python - <<'PY'
+          import os,json,shutil
+          from pathlib import Path
+          src=Path("experiment");out=Path("published");out.mkdir(exist_ok=True)
+          (out/"case.json").write_text(json.dumps(dict(case=os.environ["CASE"],commit=os.environ["GITHUB_SHA"]),indent=2))
+          names={"experiment.json","comparison.json","generation.json","summary.json","recovery.json","evaluation.json","history.json","diagnostics.json","five_panel.png","convergence.png","sealed.npz","recovered.npz"}
+          if src.is_dir():
+              for p in src.rglob("*"):
+                  if p.is_file() and p.name in names:
+                      q=out/p.relative_to(src);q.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(p,q)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: b17-original-refine-${{ matrix.case }}
+          path: published/
+          retention-days: 30
+          if-no-files-found: error
