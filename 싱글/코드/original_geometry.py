@@ -24,7 +24,9 @@ CASES={"original440":(440.,2857,.0063,1.85e-6,1.),
        "original550":(550.,2857,.0063,1.85e-6,1.),
        "original660":(660.,2857,.0063,1.85e-6,1.),
        "aperture660":(660.,2857,.005,2e-6,1.),
-       "original660_BL05":(660.,2857,.0063,1.85e-6,.5)}
+       "original660_BL05":(660.,2857,.0063,1.85e-6,.5),
+       "original440_BL05":(440.,2857,.0063,1.85e-6,.5),
+       "original550_BL05":(550.,2857,.0063,1.85e-6,.5)}
 class OriginalProfile(FullB17):
     def __init__(self,case):
         super().__init__(GRID)
@@ -138,8 +140,9 @@ def main():
         scores={}
         for path in paths:
             rec=json.loads((path/"recovery.json").read_text())
-            rec.update(physical_profile=config,previous_lbfgs_iterations=100 if path==second else 0,
-                total_lbfgs_iterations=rec["lbfgs_iterations"]+(100 if path==second else 0))
+            previous=int(json.loads((first/"recovery.json").read_text())["lbfgs_iterations"]) if path==second else 0
+            rec.update(physical_profile=config,previous_lbfgs_iterations=previous,
+                total_lbfgs_iterations=rec["lbfgs_iterations"]+previous)
             write_json(path/"recovery.json",rec)
             scores[path.name]=solver.evaluate(obs/"private_truth.npz",obs/"sensor_only.npz",path)
         write_json(root/"comparison.json",scores)
