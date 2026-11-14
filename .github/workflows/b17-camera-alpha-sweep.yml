@@ -1,0 +1,96 @@
+name: B17 Cameraman 660 nm regularization ablation
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [chatgpt/configurable-propagation-grid-20261114]
+    paths:
+      - '.github/workflows/b17-camera-alpha-sweep.yml'
+      - '싱글/코드/alpha_continuation.py'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  compare:
+    if: github.head_ref == 'chatgpt/camera-alpha-sweep-20261114'
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        include:
+          - {alpha: '0.015', label: control}
+          - {alpha: '0.005', label: alpha005}
+          - {alpha: '0.001', label: alpha001}
+          - {alpha: '0.0003', label: alpha0003}
+          - {alpha: '0', label: alpha0}
+    env:
+      ALPHA: ${{ matrix.alpha }}
+      LABEL: ${{ matrix.label }}
+      OMP_NUM_THREADS: '4'
+      OPENBLAS_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      MPLBACKEND: Agg
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install project dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Retrieve exact sealed prior recovery
+        uses: actions/download-artifact@v4
+        with:
+          name: cameraman-jacobian-660nm
+          run-id: '43595625804'
+          github-token: ${{ github.token }}
+          path: baseline
+      - name: Validate controlled experiment
+        run: |
+          python -m py_compile 싱글/코드/alpha_continuation.py
+          python - <<'PY'
+          import json
+          import numpy as np
+          from pathlib import Path
+          from 공통.optics import geometry_for,digest,phase_check
+          from 싱글.코드.alpha_continuation import EXPECTED_SENSOR,ALPHAS
+          p=Path("baseline/fixed660")
+          r=json.loads((p/"recovery.json").read_text())
+          assert r["sensor_sha256"]==EXPECTED_SENSOR
+          assert tuple(r["geometry"])==geometry_for(3800)
+          with np.load(p/"recovered.npz",allow_pickle=False) as a:
+              assert digest(phase_check(a["phase"]))==r["phase_sha256"]
+          assert len(ALPHAS)==5
+          print("SEALED BASELINE VERIFIED",r["phase_sha256"])
+          PY
+      - name: Run independent alpha continuation
+        run: python -m 싱글.코드.alpha_continuation --alpha "$ALPHA" --baseline baseline --output experiment
+      - name: Preserve evidence and figures
+        if: always()
+        run: |
+          python - <<'PY'
+          import os,json,shutil
+          from pathlib import Path
+          src=Path("experiment");out=Path("published");out.mkdir(exist_ok=True)
+          (out/"case.json").write_text(json.dumps(dict(scene="camera",wavelength_nm=660,alpha=float(os.environ["ALPHA"]),label=os.environ["LABEL"],commit=os.environ["GITHUB_SHA"],baseline_run=43595625804),indent=2))
+          names={"experiment.json","diagnostics.json","generation.json","recovery.json","evaluation.json","history.json","five_panel.png","convergence.png","recovered.npz"}
+          if src.is_dir():
+              for p in src.rglob("*"):
+                  if p.is_file() and p.name in names:
+                      q=out/p.relative_to(src);q.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(p,q)
+          if (src/"diagnostics.json").exists():
+              d=json.loads((src/"diagnostics.json").read_text())
+              e=json.loads((src/"experiment.json").read_text())
+              r=json.loads((src/"inverse/recovery.json").read_text())
+              assert e["sensor_sha256"]==r["sensor_sha256"]==d["same_sensor_sha256"]
+              assert e["initial_phase_sha256"]==r["initial_phase_sha256"]==d["same_initial_phase_sha256"]
+              assert r["alpha"]==float(os.environ["ALPHA"])
+              print("ALPHA AUDIT PASSED",json.dumps(d["scores"]))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: camera660-regularization-${{ matrix.label }}
+          path: published/
+          retention-days: 30
+          if-no-files-found: error
