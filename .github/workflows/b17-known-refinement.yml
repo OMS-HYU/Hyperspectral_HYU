@@ -1,0 +1,97 @@
+name: B17 K1 Known same-sensor refinement
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [chatgpt/single-method-routing-20261113]
+    paths:
+      - '.github/workflows/b17-known-refinement.yml'
+      - '싱글/코드/known_refinement.py'
+permissions:
+  contents: read
+jobs:
+  refine:
+    if: github.head_ref == 'chatgpt/known-refinement-20261114'
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        include:
+          - {scene: bark, start: baseline}
+          - {scene: sand, start: baseline}
+          - {scene: mandrill, start: baseline}
+          - {scene: barbara, start: baseline}
+          - {scene: stream, start: baseline}
+          - {scene: brick_wall, start: baseline}
+          - {scene: random_texture, start: baseline}
+          - {scene: random_texture, start: random}
+          - {scene: triple, start: baseline}
+    env:
+      SCENE: ${{ matrix.scene }}
+      START: ${{ matrix.start }}
+      OMP_NUM_THREADS: '4'
+      OPENBLAS_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      MPLBACKEND: Agg
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: prior-results
+          sparse-checkout: assets/known-retest-43582409270/provenance.json
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install project dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Verify numerical prior and preconditioner
+        run: |
+          python -m py_compile 싱글/코드/known_refinement.py
+          python - <<'PY'
+          import numpy as np
+          from 싱글.코드.known_refinement import precondition, ALPHAS
+          from 싱글.코드.solver import prior
+          rng=np.random.default_rng(1401)
+          p=rng.uniform(0,2*np.pi,(512,512)).ravel()
+          d=rng.normal(size=p.size); d/=np.linalg.norm(d)
+          eps=1e-4
+          for alpha in ALPHAS:
+              v,g=prior(p,alpha)
+              num=(prior(p+eps*d,alpha,False)[0]-prior(p-eps*d,alpha,False)[0])/(2*eps)
+              assert np.isclose(num,g@d,rtol=1e-4,atol=1e-10),(alpha,num,g@d)
+              z=precondition(alpha)(d)
+              assert np.isfinite(z).all() and d@z>0
+          print("Prior finite-difference and positive spectral preconditioner checks passed")
+          PY
+      - name: Run fixed-sensor continuation on native B17
+        shell: bash
+        run: |
+          set -euo pipefail
+          extra=()
+          if [[ "$START" == "random" ]]; then extra=(--random-start); fi
+          python -m 싱글.코드.known_refinement --scene "$SCENE" --baseline prior-results/assets/known-retest-43582409270/provenance.json --output refinement "${extra[@]}"
+      - name: Save only evidence and figures
+        if: always()
+        shell: bash
+        run: |
+          python - <<'PY'
+          import os,json,shutil
+          from pathlib import Path
+          root=Path("refinement");out=Path("published");out.mkdir(exist_ok=True)
+          (out/"case.json").write_text(json.dumps(dict(scene=os.environ["SCENE"],start=os.environ["START"],wavelength_nm=660,commit=os.environ["GITHUB_SHA"],prior_run=43582409270,phase_rmse_gate_rad=.15),indent=2))
+          names={"experiment.json","comparison.json","generation.json","recovery.json","evaluation.json","history.json","five_panel.png","convergence.png"}
+          if root.is_dir():
+              for p in root.rglob("*"):
+                  if p.is_file() and p.name in names:
+                      q=out/p.relative_to(root);q.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(p,q)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: refine-${{ matrix.scene }}-${{ matrix.start }}
+          path: published/
+          retention-days: 30
+          if-no-files-found: error
