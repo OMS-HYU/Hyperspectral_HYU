@@ -17,7 +17,14 @@ RADII=(16,64,128,192,224,320)
 GRID=3800
 
 def power(a):
-    return float(np.vdot(a,a).real)
+    # float32 vdot accumulates millions of terms inaccurately; use float64 sums.
+    a=np.asarray(a)
+    total=0.
+    for block in np.array_split(a, max(1,(a.shape[0]+63)//64),axis=0):
+        total+=float(np.sum(np.square(block.real,dtype=np.float64),dtype=np.float64))
+        if np.iscomplexobj(block):
+            total+=float(np.sum(np.square(block.imag,dtype=np.float64),dtype=np.float64))
+    return total
 
 def ratio(a,b):
     return float(a/max(b,1e-30))
@@ -90,7 +97,7 @@ def main():
                 for kx,ky,d in probes(r):
                     row=stage(m,cam,(1j*u*d).astype(np.complex64),z,ref)
                     row.update(radius=r,kx=kx,ky=ky)
-                    assert row["parseval_relative_error"]<.001
+                    assert row["parseval_relative_error"]<1e-4, row
                     rows.append(row);print("STAGE",name,json.dumps(row),flush=True)
                 gc.collect()
             keys=("propagating_fraction","asm_pass_fraction_of_input",
