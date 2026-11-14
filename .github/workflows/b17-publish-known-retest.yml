@@ -1,0 +1,141 @@
+name: Publish verified B17 Known retest to existing site
+on:
+  pull_request:
+    types: [synchronize]
+    branches: [chatgpt/single-method-routing-20261113]
+    paths: ['.github/workflows/b17-publish-known-retest.yml']
+permissions:
+  contents: write
+  actions: read
+  pages: write
+jobs:
+  publish:
+    if: github.head_ref == 'chatgpt/known-retest-20261114'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          fetch-depth: 1
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          run-id: 43582409270
+          pattern: known-*
+          path: /tmp/b17-retest
+          merge-multiple: false
+      - name: Update existing dashboard with all verified result figures
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json, re, hashlib, shutil, html
+          from pathlib import Path
+          root=Path('/tmp/b17-retest')
+          path=Path('index.html')
+          raw=path.read_text(encoding='utf-8')
+          match=re.search(r'(<script[^>]*id="dataset"[^>]*>)([\s\S]*?)(</script>)',raw)
+          assert match
+          data=json.loads(match[2])
+          assert len(data)==39
+          lookup={x['id']:x for x in data}
+          run='43582409270'
+          url='https://github.com/OMS-HYU/Hyperspectral_HYU/actions/runs/'+run
+          protocol='Run '+run+' · 원본 B17 · full grid · 독립 신규 관측'
+          assets=Path('assets')/('known-retest-'+run)
+          assets.mkdir(parents=True,exist_ok=True)
+          records=[]
+          affected={}
+          initial_figures=sum(len(x['figures']) for x in data)
+          for case_path in sorted(root.glob('*/case.json')):
+              case=json.loads(case_path.read_text())
+              scene=case['scene']
+              assert scene in lookup,scene
+              x=lookup[scene]
+              assert case['mode']=='known' and case['geometry']==[3800,1429,512,3000]
+              for ep in sorted(case_path.parent.rglob('evaluation.json')):
+                  e=json.loads(ep.read_text())
+                  r=json.loads(ep.with_name('recovery.json').read_text())
+                  assert e['mode']=='known' and r['truth_in_inverse'] is False
+                  assert r['geometry']==[3800,1429,512,3000]
+                  assert r['B17_inner_shas']['bayesLUT_MSE_v6.3_nonoverlap.mat']=='02c551f2e24fb01d91416ea21cd17d24ae1c5e6fab0d630bff8e1fb2b4feaeaa'
+                  assert r['B17_inner_shas']['0.6NA_random_70_1_300_1mm_mapped_width.mat']=='b7d799c1e3a5913e7e9034fd2efc31dc2dab98822058ef08e2e57470ac2d68f9'
+                  method=e['method']
+                  w=int(e['actual_wavelength_nm'])
+                  assert w==case['wavelength_nm']==e['estimated_wavelength_nm']
+                  assert e['phase_pass']==(e['full_rmse_rad']<=.15 and (not e.get('groups') or (e['roi_rmse_rad']<=.15 and e['groups_passed']==e['groups_total'] and all(v<=.15 for k,v in e.items() if k.startswith('layer_')))))
+                  assert e['sensor_pass']==(e['sensor_l2']<=.025)
+                  verdict='통과' if e['passed'] else ('조건 충족·조기 수렴' if e['phase_pass'] and e['sensor_pass'] and not e['completed'] else ('부분 통과' if e.get('groups') and e['full_rmse_rad']<=.15 else '미달'))
+                  g=e['gd_iterations']; l=e['lbfgs_iterations']
+                  method_label=f'Pyramid64 GD{g} + L-BFGS{l}' if method=='pyramid' else f'Full GD{g} + Spectral Periodic L-BFGS{l}'
+                  detail=f'2026-11-14 신규 Known 실험 · GD{g}+L-BFGS{l} · {r["termination"]} · noise seed {case["seed"]}'
+                  k={'w':w,'r':e['full_rmse_rad'],'s':100*e['sensor_l2'],'method':method_label,'noise':1,'verdict':verdict,'detail':detail,'protocol':protocol,'completed':e['completed'],'passed':e['passed']}
+                  if e.get('groups'):
+                      k.update(roi=e['roi_rmse_rad'],groups=f'{e["groups_passed"]}/{e["groups_total"]}')
+                      k['detail']+=' · '+' / '.join(f'{i}층 {e[f"layer_{i}_rmse_rad"]:.6f}' for i in (1,2,3) if f'layer_{i}_rmse_rad' in e)+'; '+', '.join(f'Group {v["group"]}: {v["rmse_rad"]:.6f}' for v in e['groups'] if v['rmse_rad']>.15)
+                  fig=ep.with_name('five_panel.png')
+                  assert fig.is_file() and fig.read_bytes().startswith(b'\x89PNG\r\n\x1a\n')
+                  name=f'{scene}-{w}-{method}.png'
+                  target=assets/name
+                  shutil.copy2(fig,target)
+                  sha=hashlib.sha256(fig.read_bytes()).hexdigest()
+                  assert hashlib.sha256(target.read_bytes()).hexdigest()==sha
+                  records.append({'case':case,'evaluation':e,'recovery':r,'figure_sha256':sha,'figure':str(target)})
+                  assert not any(v.get('protocol')==protocol and v['method']==method_label and v['w']==w for v in x['known'])
+                  record=len(x['known']);x['known'].append(k)
+                  x['figures'].insert(0,{'mode':'known','title':f'{w} nm · 신규 {method} · RMSE {k["r"]:.6f} rad · {verdict}','src':str(target),'record':record,'source':url})
+                  affected.setdefault(scene,[]).append(k)
+          assert len(affected)==14 and len(records)==17,(len(affected),len(records))
+          assert initial_figures==71,initial_figures
+          assert sum(len(x['figures']) for x in data)==88
+          for scene,rows in affected.items():
+              x=lookup[scene]
+              best=min(rows,key=lambda k:k['r'])
+              x['latest']=best;x['status']=best['verdict']
+              x['note']+=f' | 2026-11-14 신규 Known 재시험: {best["w"]} nm, {best["r"]:.6f} rad, {best["s"]:.3f}% · {best["verdict"]}.'
+              if scene=='triple':
+                  x['rec_note']='신규 재시험: 전체·ROI·층별·그룹 결과는 상세 기록 참조. 기존 결과 보존.'
+              pattern=r'<tr[^>]*data-id="'+re.escape(scene)+r'"[\s\S]*?</tr>'
+              def update_row(m):
+                  old=m[0]
+                  old=re.sub(r'data-status="[^"]*"', 'data-status="'+html.escape(best['verdict'],quote=True)+'"',old,count=1)
+                  pill='ok' if best['passed'] else ('warn' if best['r']<=.15 else 'bad')
+                  old=re.sub(r'<span class="pill [^"]* knownbadge">[^<]*</span>', f'<span class="pill {pill} knownbadge">Known {html.escape(best["verdict"])}</span>',old,count=1)
+                  cells=list(re.finditer(r'<td class="knowncol">[\s\S]*?</td>',old))
+                  assert len(cells)==2,(scene,len(cells))
+                  text='<div class="mini"><b>'+str(best['w'])+' nm</b><span>'+f'{best["r"]:.6f} rad · {best["s"]:.3f}%</span></div><small>'+html.escape(best['method'])+' · '+html.escape(best['verdict'])+'</small>'
+                  if 'roi' in best:
+                      text+='<small>ROI '+f'{best["roi"]:.6f}'+' rad · '+html.escape(best['groups'])+'</small>'
+                  c=cells[1]
+                  old=old[:c.start()]+'<td class="knowncol">'+text+'</td>'+old[c.end():]
+                  c=cells[0]
+                  # Keep the historical wavelength summary; append the new result.
+                  old=old[:c.end()-5]+text+old[c.end()-5:]
+                  return old
+              raw,n=re.subn(pattern,update_row,raw,count=1)
+              assert n==1,scene
+          raw=re.sub(r'(<script[^>]*id="dataset"[^>]*>)[\s\S]*?(</script>)',lambda m:m[1]+json.dumps(data,ensure_ascii=False,separators=(',',':'))+m[2],raw,count=1)
+          path.write_text(raw,encoding='utf-8')
+          (assets/'provenance.json').write_text(json.dumps(records,ensure_ascii=False,indent=2),encoding='utf-8')
+          assert all(Path(f['src']).is_file() for x in data for f in x['figures'] if not f['src'].startswith(('data:','http')))
+          assert all(Path(x['thumb']).is_file() for x in data if x.get('thumb') and not x['thumb'].startswith(('data:','http')))
+          print('VERIFIED 39 scenes, 88 figures, 17 new evaluations; all local assets present.')
+          PY
+      - name: Commit to existing gh-pages branch
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html assets/known-retest-43582409270
+          git commit -m "Publish 17 verified Known retest figures and metrics"
+          git push origin HEAD:gh-pages
+      - name: Request Pages rebuild if Pages is enabled
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          if gh api repos/OMS-HYU/Hyperspectral_HYU/pages --jq '{html_url,build_type,source,status}'; then
+            gh api --method POST repos/OMS-HYU/Hyperspectral_HYU/pages/builds || echo "Pages rebuild request not accepted; branch update is complete."
+          else
+            echo "Pages configuration not readable or not enabled; branch update is complete."
+          fi
