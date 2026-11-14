@@ -81,7 +81,7 @@ def gn(engine,y,start,dest,damping):
     checks=lin.check(x,engine)
     write_json(dest/"jacobian_check.json",checks)
     def log(k,**kw):
-        row=dict(stage="LBFGS",iteration=k,algorithm="Gauss-Newton",
+        row=dict(stage="GN",iteration=k,algorithm="Gauss-Newton",
                  objective=lin.loss,sensor_l2=float(np.sqrt(lin.loss)),
                  seconds=time.monotonic()-t0,**counts,**kw)
         hist.append(row);write_json(dest/"history.json",hist);print(json.dumps(row),flush=True)
