@@ -17,6 +17,8 @@ GD_SHA="bf037b13cdbf10e52a60ab8adfd42b8d16434d6f70667c48603eb4314b94c8dc"
 FINAL_SHA="c3d82c82c5709a422c4b613e5313774c49d0cba04e9d8d0276fd438221156c9a"
 
 def generate_reference(engine,archive,dest):
+    if tuple(engine.geometry)!=GEOMETRY:
+        raise ValueError("Historical byte-exact replay requires original 3800 grid")
     archive=Path(archive)
     if hashlib.sha256(archive.read_bytes()).hexdigest()!=ARCHIVE_SHA:
         raise ValueError("Wrong historical spectral reference archive")
