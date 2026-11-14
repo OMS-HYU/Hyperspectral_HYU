@@ -6,7 +6,7 @@ from pathlib import Path
 import numpy as np
 from scipy import fft
 from 공통.object_models import wrap,TAU,N,RBC_MODELS,IMAGE_MODELS,SOURCES,rbc_phase,image_phase
-from 공통.optics import GEOMETRY,ALPHA,GD_STEPS,LBFGS_STEPS,digest,write_json,phase_check,wavelength_check,FullB17
+from 공통.optics import GEOMETRY,ALPHA,GD_STEPS,LBFGS_STEPS,digest,write_json,phase_check,wavelength_check,FullB17,propagation_grid,DEFAULT_PROPAGATION_N,grid_details
 
 def prior(p,alpha=ALPHA,gradient=True):
     a=np.asarray(p,dtype=np.float64).reshape(N,N)
@@ -113,9 +113,9 @@ def fit(engine,y,w,dest,method="spectral"):
     np.savez_compressed(dest/"predicted.npz",sensor=scale*pure)
     result=dict(wavelength_nm=w,method=method,gd_iterations=100,lbfgs_iterations=accepted,
         completed=accepted==100,termination=reason,sensor_l2=float(np.sqrt(loss)),
-        sensor_sha256=digest(y),phase_sha256=digest(phase),geometry=list(GEOMETRY),
+        sensor_sha256=digest(y),phase_sha256=digest(phase),geometry=list(engine.geometry),
         B17_archive_sha256=engine.archive_sha,B17_source_fingerprint=engine.source_fingerprint,B17_inner_shas=engine.inner_shas,
-        phase_range=[0,float(TAU)],alpha=ALPHA,truth_in_inverse=False,
+        phase_range=[0,float(TAU)],alpha=ALPHA,truth_in_inverse=False,grid=grid_details(engine.propagation_n,w),
         spectral_preconditioner_source="660 nm historical Jacobian; heuristic at other wavelengths" if method=="spectral" else "identity",
         **calls)
     write_json(dest/"recovery.json",result)
@@ -147,9 +147,9 @@ def generate(engine,dest,scene,w,seed,geometry_seed=20261127,image_file=None):
     np.savez_compressed(dest/"sensor_only.npz",sensor=y)
     np.savez_compressed(dest/"private_truth.npz",actual_wavelength_nm=w,**truth)
     write_json(dest/"generation.json",dict(scene=scene,seed=seed,geometry_seed=geometry_seed,noise_sigma=sigma,
-        noise_pct_mean=1,geometry=list(GEOMETRY),phase_range=[0,float(TAU)],
+        noise_pct_mean=1,geometry=list(engine.geometry),phase_range=[0,float(TAU)],
         sensor_sha256=digest(y),B17_archive_sha256=engine.archive_sha,B17_source_fingerprint=engine.source_fingerprint,
-        B17_inner_shas=engine.inner_shas,sources=SOURCES if scene in RBC_MODELS else {},
+        B17_inner_shas=engine.inner_shas,grid=grid_details(engine.propagation_n,w),sources=SOURCES if scene in RBC_MODELS else {},
         model_assumption="660 nm Hb index contrast held constant at other wavelengths (nondispersive approximation)" if scene in RBC_MODELS else "grayscale phase"))
 def recover(engine,sensor,dest,mode,w,method):
     dest.mkdir(parents=True,exist_ok=False)
@@ -256,7 +256,9 @@ def main(argv=None):
         a.add_argument("--wavelength",type=float,help="Known inverse wavelength; forbidden for blind")
         a.add_argument("--method",choices=("auto","spectral","periodic","pyramid","compare"),default="auto" if a is s else "spectral")
     r.add_argument("--object-type",choices=("rbc","general"),help="Explicit specimen category for auto recover")
-    for a in (g,r,s):a.add_argument("--output",type=Path,required=True)
+    for a in (g,r,s):
+        a.add_argument("--output",type=Path,required=True)
+        a.add_argument("--propagation-n",type=int,default=DEFAULT_PROPAGATION_N,help="Numerical FFT grid only; physical system fixed")
     r.add_argument("--sensor",type=Path,required=True)
     e.add_argument("--truth",type=Path,required=True);e.add_argument("--sensor",type=Path,required=True);e.add_argument("--recovery",type=Path,required=True)
     a=p.parse_args(argv)
@@ -276,7 +278,10 @@ def main(argv=None):
             p.error("This scene requires --image-file PATH")
     if a.command=="evaluate":evaluate_selected(a.truth,a.sensor,a.recovery);return
     with fft.set_workers(4):
-        engine=FullB17()
+        try:
+            n=propagation_grid(getattr(a,"propagation_n",DEFAULT_PROPAGATION_N))
+        except ValueError as exc:p.error(str(exc))
+        engine=FullB17(n)
         if a.command=="reference":
             from 싱글.코드.fixed_reference import generate_reference,compare_reference
             a.output.mkdir(parents=True,exist_ok=False);obs=a.output/"observation";out=a.output/"inverse"
