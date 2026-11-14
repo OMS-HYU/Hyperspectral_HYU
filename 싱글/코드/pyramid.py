@@ -10,7 +10,7 @@ import numpy as np
 from scipy import sparse,ndimage
 from scipy.optimize import minimize
 from 공통.object_models import wrap,TAU,N
-from 공통.optics import phase_check,wavelength_check,digest,write_json,GEOMETRY,ALPHA
+from 공통.optics import phase_check,wavelength_check,digest,write_json,GEOMETRY,ALPHA,grid_details
 
 SCHEDULES={"pyramid64":((64,35),(128,35),(256,40),(512,40))}
 REG=REG_LAMBDA=ALPHA
@@ -243,7 +243,7 @@ def fit_pyramid(engine,y,w,dest):
     result=dict(wavelength_nm=w,method="pyramid",gd_iterations=150,
         lbfgs_iterations=info["iterations"],completed=info["iterations"]==150,
         termination=info["termination"],sensor_l2=float(np.sqrt(loss)),
-        sensor_sha256=digest(y),phase_sha256=digest(phase),geometry=list(GEOMETRY),
+        sensor_sha256=digest(y),phase_sha256=digest(phase),geometry=list(engine.geometry),grid=grid_details(engine.propagation_n,w),
         B17_archive_sha256=engine.archive_sha,B17_source_fingerprint=engine.source_fingerprint,B17_inner_shas=engine.inner_shas,
         phase_range=[0,float(TAU)],alpha=ALPHA,truth_in_inverse=False,
         pyramid_schedule=schedule,internal_lift=True,seconds=time.monotonic()-t,**calls)
