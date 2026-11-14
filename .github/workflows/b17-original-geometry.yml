@@ -1,0 +1,75 @@
+name: B17 original Real-scale geometry comparison
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [chatgpt/camera-stage-transfer-20261114]
+    paths:
+      - '.github/workflows/b17-original-geometry.yml'
+      - '싱글/코드/original_geometry.py'
+permissions:
+  contents: read
+jobs:
+  compare:
+    if: github.head_ref == 'chatgpt/b17-original-geometry-20261115'
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        case: [original440, original550, original660, aperture660, original660_BL05]
+    env:
+      CASE: ${{ matrix.case }}
+      OMP_NUM_THREADS: '4'
+      OPENBLAS_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      MPLBACKEND: Agg
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Validate original B17 source and profile
+        run: |
+          python -m py_compile 싱글/코드/original_geometry.py
+          python - <<'PY'
+          from 싱글.코드.original_geometry import OriginalProfile
+          import os,json
+          x=OriginalProfile(os.environ["CASE"])
+          assert x.geometry==(5700,2857,512,3000)
+          assert x.config()["object_meta_m"]==400e-6
+          print("ORIGINAL PROFILE",json.dumps(x.config()))
+          PY
+      - name: Run phase-only original-geometry recovery
+        run: python -m 싱글.코드.original_geometry --case "$CASE" --output experiment
+      - name: Preserve audit and figures
+        if: always()
+        run: |
+          python - <<'PY'
+          import os,json,shutil
+          from pathlib import Path
+          src=Path("experiment");out=Path("published");out.mkdir(exist_ok=True)
+          (out/"case.json").write_text(json.dumps(dict(case=os.environ["CASE"],commit=os.environ["GITHUB_SHA"]),indent=2))
+          names={"experiment.json","comparison.json","generation.json","summary.json","recovery.json","evaluation.json","history.json","five_panel.png","convergence.png","sealed.npz","recovered.npz"}
+          if src.is_dir():
+              for p in src.rglob("*"):
+                  if p.is_file() and p.name in names:
+                      q=out/p.relative_to(src);q.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(p,q)
+          if (src/"comparison.json").exists():
+              e=json.loads((src/"experiment.json").read_text())
+              r1=json.loads((src/"alpha015/recovery.json").read_text())
+              r2=json.loads((src/"alpha005/recovery.json").read_text())
+              assert r1["sensor_sha256"]==r2["sensor_sha256"]
+              assert r1["phase_sha256"]==r2["initial_phase_sha256"]
+              assert r1["physical_profile"]==r2["physical_profile"]==e
+              print("ORIGINAL AUDIT PASSED")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: b17-original-${{ matrix.case }}
+          path: published/
+          retention-days: 30
+          if-no-files-found: error
