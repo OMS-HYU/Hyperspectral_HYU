@@ -1,0 +1,80 @@
+name: B17 Cameraman wavelength Jacobian ablation
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [chatgpt/single-method-routing-20261113]
+    paths:
+      - '.github/workflows/b17-wavelength-jacobian.yml'
+      - '싱글/코드/wavelength_jacobian.py'
+permissions:
+  contents: read
+jobs:
+  compare:
+    if: github.head_ref == 'chatgpt/cameraman-wavelength-jacobian-20261114'
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        wavelength: [440, 550, 660]
+    env:
+      NM: ${{ matrix.wavelength }}
+      OMP_NUM_THREADS: '4'
+      OPENBLAS_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      MPLBACKEND: Agg
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install project requirements
+        run: python -m pip install -r requirements.txt
+      - name: Check probe normalization and positive preconditioner
+        run: |
+          python -m py_compile 싱글/코드/wavelength_jacobian.py
+          python - <<'PY'
+          import numpy as np
+          from 싱글.코드.wavelength_jacobian import RADII, probes, calibrated_preconditioner
+          for r in RADII:
+              ps=list(probes(r))
+              assert ps
+              for kx,ky,d in ps:
+                  assert abs(d.mean())<1e-12 and abs(np.mean(d*d)-1)<1e-12
+          P=calibrated_preconditioner(dict(radii=list(RADII),sensitivities=[1,.9,.7,.4,.2,.1,.06]),.015)
+          a=np.random.default_rng(17).normal(size=512**2)
+          b=P(a)
+          assert np.isfinite(b).all() and a@b>0
+          print("PASS normalization and positive preconditioner")
+          PY
+      - name: Run full-grid paired Cameraman experiment
+        run: python -m 싱글.코드.wavelength_jacobian --wavelength "$NM" --output experiment
+      - name: Preserve evidence and figures
+        if: always()
+        run: |
+          python - <<'PY'
+          import os,json,shutil
+          from pathlib import Path
+          src=Path("experiment");dst=Path("published");dst.mkdir(exist_ok=True)
+          (dst/"case.json").write_text(json.dumps(dict(scene="camera",wavelength_nm=int(os.environ["NM"]),commit=os.environ["GITHUB_SHA"],comparison="fixed660 vs adaptive",geometry=[3800,1429,512,3000]),indent=2))
+          names={"experiment.json","comparison.json","generation.json","summary.json","jacobian_flat.json","jacobian_gd150.json","recovery.json","evaluation.json","history.json","five_panel.png","convergence.png","sealed.npz","recovered.npz"}
+          if src.is_dir():
+              for p in src.rglob("*"):
+                  if p.is_file() and p.name in names:
+                      q=dst/p.relative_to(src);q.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(p,q)
+          if (src/"comparison.json").exists():
+              a=json.loads((src/"comparison.json").read_text())
+              assert set(a)=={"fixed660","adaptive"}
+              r=[json.loads((src/m/"recovery.json").read_text()) for m in a]
+              assert r[0]["sensor_sha256"]==r[1]["sensor_sha256"]
+              assert r[0]["initial_phase_sha256"]==r[1]["initial_phase_sha256"]
+              print("PAIRED FINAL",json.dumps(a))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cameraman-jacobian-${{ matrix.wavelength }}nm
+          path: published/
+          retention-days: 30
+          if-no-files-found: error
