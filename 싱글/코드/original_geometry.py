@@ -17,7 +17,6 @@ from 공통.object_models import N,wrap,image_phase
 from 공통.b17_core import read_b17_source,WIDTH_NAME
 from 공통.propagation import SOURCE
 from 싱글.코드 import solver,pyramid,wavelength_jacobian as jac
-from 싱글.코드.stage_transfer import stage
 from 싱글.코드.alpha_continuation import EXPECTED_TRUTH
 
 GRID=5700
@@ -36,11 +35,29 @@ class OriginalProfile(FullB17):
         assert hashes==self.inner_shas
         width=loadmat(io.BytesIO(data[WIDTH_NAME]))["mapped_width"]
         self.width_shape=list(width.shape)
-        assert width.ndim==2 and min(width.shape)>=self.meta_n
-        sy=width.shape[0]//2-self.meta_n//2
-        sx=width.shape[1]//2-self.meta_n//2
-        self.idx=width[sy:sy+self.meta_n,sx:sx+self.meta_n].astype(np.int16)-60
-        assert self.idx.min()>=0 and self.idx.max()<self.b.lut.shape[0]
+        # Original torch_pad_center pads the PHASE map with zero radians,
+        # then applies a separate 1 mm aperture. Do not assume the MAT
+        # dimensions equal the nominal aperture or synthesize pillar widths.
+        if width.ndim!=2 or not np.isfinite(width).all():
+            raise ValueError(f"Invalid B17 width map shape {width.shape}")
+        if not np.all(width==np.rint(width)):
+            raise ValueError("Noninteger B17 mapped widths")
+        self.idx=width.astype(np.int32)-60
+        if self.idx.min()<0 or self.idx.max()>=self.b.lut.shape[0]:
+            raise ValueError(f"Original width map indices outside LUT: {self.idx.min()}..{self.idx.max()}")
+        # Center convention matches torch_pad_center: floor(N/2).
+        self.phase_source_slices=[];self.phase_dest_slices=[]
+        for size in width.shape:
+            left=self.meta_n//2-size//2
+            lo=max(0,left);hi=min(self.meta_n,left+size)
+            self.phase_source_slices.append(slice(lo-left,hi-left))
+            self.phase_dest_slices.append(slice(lo,hi))
+        self.mapped_pixels_in_aperture=int(np.prod([q.stop-q.start for q in self.phase_dest_slices]))
+        self.zero_phase_padding_pixels=self.meta_n**2-self.mapped_pixels_in_aperture
+        print("B17_MAP_AUDIT",json.dumps(dict(source_shape=self.width_shape,
+            aperture_shape=[self.meta_n,self.meta_n],mapped_pixels=self.mapped_pixels_in_aperture,
+            zero_phase_padding_pixels=self.zero_phase_padding_pixels,
+            width_min_nm=int(width.min()),width_max_nm=int(width.max()))),flush=True)
     def optics(self,w):
         w=wavelength_check(w)
         n,meta_n,obj,sensor=self.geometry
@@ -48,7 +65,11 @@ class OriginalProfile(FullB17):
           wavelength_m=w*1e-9,input_pitch_m=350e-9,object_meta_m=400e-6,
           meta_sensor_m=self.z2,sensor_pitch_m=self.pitch)
         lut=np.array([np.interp(w,self.b.lam,row) for row in self.b.lut])
-        meta=np.exp(1j*wrap(lut[self.idx])).astype(np.complex64)
+        # Exactly the phase-padding convention in the original Real-scale code.
+        phase=np.zeros((meta_n,meta_n),dtype=np.float64)
+        phase[tuple(self.phase_dest_slices)]=wrap(lut[self.idx[tuple(self.phase_source_slices)]])
+        meta=np.exp(1j*phase).astype(np.complex64)
+        del phase
         m=self.Model(c,meta)
         if self.bl!=1.:
             f=fft.fftfreq(n,c.input_pitch_m)
@@ -64,6 +85,9 @@ class OriginalProfile(FullB17):
     def config(self):
         return dict(case=self.case,geometry=list(self.geometry),original_width_shape=self.width_shape,
           aperture_width_m=self.meta_n*350e-9,input_pitch_m=350e-9,
+          mapped_pixels_in_aperture=self.mapped_pixels_in_aperture,
+          zero_phase_padding_pixels=self.zero_phase_padding_pixels,
+          phase_padding_policy="centered original width map; zero phase outside map within nominal aperture, as in original torch_pad_center",
           object_meta_m=400e-6,meta_sensor_m=self.z2,camera_pitch_m=self.pitch,
           camera_width_m=3000*self.pitch,sasm_blfactor=self.bl,
           wavelength_nm=self.w,propagation_n=GRID,
