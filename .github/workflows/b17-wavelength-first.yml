@@ -1,0 +1,61 @@
+name: B17 wavelength-only speckle features
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [chatgpt/b17-profiled-blind-20261115]
+    paths:
+      - '.github/workflows/b17-wavelength-first.yml'
+      - '싱글/코드/wavelength_only.py'
+permissions:
+  contents: read
+jobs:
+  identify:
+    if: github.head_ref == 'chatgpt/b17-wavelength-first-20261115'
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        include:
+          - {group: camera, cases: 'camera440 camera550 camera587p6'}
+          - {group: endpoint, cases: 'camera660 pepper660'}
+          - {group: rbc, cases: 'normal473p4 triple660'}
+    env:
+      GROUP: ${{ matrix.group }}
+      CASES: ${{ matrix.cases }}
+      OMP_NUM_THREADS: '4'
+      OPENBLAS_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Validate code
+        run: python -m py_compile 싱글/코드/wavelength_only.py
+      - name: Wavelength-only search; no phase inversion
+        run: python -m 싱글.코드.wavelength_only --output experiment --cases $CASES
+      - name: Preserve wavelength diagnostics
+        if: always()
+        run: |
+          python - <<'PY'
+          import os,json,shutil
+          from pathlib import Path
+          src=Path("experiment");out=Path("published");out.mkdir(exist_ok=True)
+          (out/"group.json").write_text(json.dumps(dict(group=os.environ["GROUP"],commit=os.environ["GITHUB_SHA"]),indent=2))
+          names={"experiment.json","comparison.json","wavelength_search.json","evaluation.json","generation.json","observed_feature.npz","calibrated_features.npz"}
+          if src.is_dir():
+              for p in src.rglob("*"):
+                  if p.is_file() and p.name in names:
+                      q=out/p.relative_to(src);q.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(p,q)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: b17-wavelength-first-${{ matrix.group }}
+          path: published/
+          retention-days: 30
+          if-no-files-found: error
