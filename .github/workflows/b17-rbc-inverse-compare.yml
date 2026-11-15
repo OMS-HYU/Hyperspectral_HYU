@@ -1,0 +1,60 @@
+name: B17 RBC blind inverse comparison
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [chatgpt/b17-rbc-wavelength-first-20261115]
+    paths:
+      - '.github/workflows/b17-rbc-inverse-compare.yml'
+      - '싱글/코드/rbc_inverse_compare.py'
+permissions:
+  contents: read
+jobs:
+  compare:
+    if: github.head_ref == 'chatgpt/b17-rbc-inverse-compare-20261115'
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    strategy:
+      fail-fast: false
+      max-parallel: 6
+      matrix:
+        case: [normal440, normal550, normal587p6, triple440, triple550, triple587p6]
+        arm: [spectral, pyramid]
+    env:
+      CASE: ${{ matrix.case }}
+      ARM: ${{ matrix.arm }}
+      OMP_NUM_THREADS: '4'
+      OPENBLAS_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      MPLBACKEND: Agg
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Validate code
+        run: python -m py_compile 싱글/코드/rbc_inverse_compare.py
+      - name: Estimate wavelength and recover RBC phase
+        run: python -m 싱글.코드.rbc_inverse_compare --case "$CASE" --arm "$ARM" --output experiment
+      - name: Preserve actual recovery and metrics
+        if: always()
+        run: |
+          python - <<'PY'
+          import os,json,shutil
+          from pathlib import Path
+          src=Path("experiment");out=Path("published");out.mkdir(exist_ok=True)
+          (out/"case.json").write_text(json.dumps(dict(case=os.environ["CASE"],arm=os.environ["ARM"],commit=os.environ["GITHUB_SHA"]),indent=2))
+          names={"experiment.json","comparison.json","wavelength_search.json","generation.json","summary.json","recovery.json","evaluation.json","history.json","five_panel.png","convergence.png","sealed.npz","gd_sealed.npz","recovered.npz","private_truth.npz"}
+          if src.is_dir():
+              for p in src.rglob("*"):
+                  if p.is_file() and p.name in names:
+                      q=out/p.relative_to(src);q.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(p,q)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: b17-rbc-inverse-${{ matrix.case }}-${{ matrix.arm }}
+          path: published/
+          retention-days: 30
+          if-no-files-found: error
