@@ -4,7 +4,7 @@
   "repository": "https://github.com/OMS-HYU/Hyperspectral_HYU.git",
   "physics": "Native5713 amplitude; propagation5713/meta2857/object512/sensor3000; fixed background; 400um/6.3mm; sensor1.85um",
   "phase_metric": "Circular RMSE without piston alignment; linear RMSE reported separately",
-  "verified_completed_count": 10,
+  "verified_completed_count": 11,
   "results": [
     {
       "scene": "barbara",
@@ -189,6 +189,53 @@
       "five_panel": true,
       "verification": "Phase/sensor/truth SHA-256 verified in this public project workspace",
       "evaluation_url": "https://oms-hyu.github.io/Hyperspectral_HYU/data/single/chelsea.json",
+      "public_repository": "OMS-HYU/Hyperspectral_HYU"
+    },
+    {
+      "scene": "coins",
+      "wavelength_nm": 660.0,
+      "noise_seed": 673006,
+      "sensor_sha256": "34da23d7d084b00b6ec42b41c27550e5caa4595dcf4bc7bffd2d803d5726f1a7",
+      "truth_sha256": "9219829737930cb8ccd3cdf584b2919302236991c465dcb6d0c46740dfef2d76",
+      "phase_sha256": "43ce6305e0f675c332694ac5a40d97e4194173a259833083378e41204794945d",
+      "gd_accepted": 150,
+      "lbfgs_accepted": 100,
+      "circular_rmse_rad": 0.02968635415053651,
+      "linear_rmse_rad": 0.02968635415053651,
+      "reference_float32_sensor_l2": 0.008747217976958648,
+      "recovery_float64_sensor_l2": 0.008747336016266257,
+      "quality_pass": true,
+      "variant": "float32 zero-start GD up to 150 + float64 refinement up to 150",
+      "stopping_policy": {
+        "gd_accepted": 150,
+        "lbfgs_accepted": 100,
+        "gd_max": 150,
+        "lbfgs_max": 150,
+        "gd_stop_reason": "budget",
+        "refine_stop_reason": "sensor_and_phase_converged",
+        "gd_stop_evidence": {},
+        "refine_stop_evidence": {
+          "sensor_l2": 0.00874733619699483,
+          "relative_objective_change": 6.508195685141587e-07,
+          "phase_rms_rad": 0.0006447026000729192,
+          "truth_used": false
+        },
+        "thresholds": {
+          "sensor_l2": 0.025,
+          "relative_objective_change": 1e-05,
+          "phase_rms_rad": 0.001,
+          "window": 10
+        },
+        "truth_used_for_stopping": false
+      },
+      "truth_used_for_evaluation_only": true,
+      "common_reference_L60_complete": false,
+      "preview": "comparison.png",
+      "figure": "https://oms-hyu.github.io/Hyperspectral_HYU/assets/native_20261117/coins.png",
+      "sensor_l2": 0.008747217976958648,
+      "five_panel": true,
+      "verification": "Phase/sensor/truth SHA-256 verified in this public project workspace",
+      "evaluation_url": "https://oms-hyu.github.io/Hyperspectral_HYU/data/single/coins.json",
       "public_repository": "OMS-HYU/Hyperspectral_HYU"
     },
     {
