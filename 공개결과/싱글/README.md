@@ -9,6 +9,7 @@
 | boat | 150 / 60 | 0.0377728 | 0.87536% | [보기](boat/comparison.jpg) |
 | brick | 150 / 60 | 0.0261652 | 0.87508% | [보기](brick/comparison.png) |
 | camera_rot90 | 150 / 60 | 0.0583292 | 0.87745% | [보기](camera_rot90/comparison.jpg) |
+| chelsea | 150 / 37 | 0.0254758 | 0.87476% | [보기](chelsea/comparison.png) |
 | mandrill | 150 / 60 | 0.0723884 | 0.87376% | [보기](mandrill/comparison.jpg) |
 | moon | 150 / 60 | 0.0261602 | 0.87526% | [보기](moon/comparison.png) |
 | moon_flipud | 150 / 60 | 0.0261004 | 0.87528% | [보기](moon_flipud/comparison.png) |
