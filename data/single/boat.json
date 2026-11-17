@@ -1,0 +1,22 @@
+{
+  "scene": "boat",
+  "name": "Boat",
+  "wavelength_nm": 660,
+  "gd_accepted": 150,
+  "lbfgs_accepted": 60,
+  "extra_lbfgs_accepted": 0,
+  "circular_rmse_rad": 0.03777281530318568,
+  "linear_rmse_rad": 0.0663970980563124,
+  "sensor_l2": 0.008753568285459345,
+  "quality_pass": true,
+  "phase_sha256": "49ffe3211df4cd9daa39f5a682c3e6d70bd13a1deba4cc15348de6f8a7daa6d4",
+  "sensor_sha256": "0d617dc28dbb3c504ebe9350df5f4b962dd6130f3000d5004bde34fcebf9ce8d",
+  "truth_sha256": "1cd9f9de83c67cce0440c8d8983e44d220829f15d0743bb560da384c6d72d85f",
+  "variant": "GD150 + circular L-BFGS60 alpha=1e-4",
+  "verification": "Previously verified baseline; raw arrays may be in historical archives",
+  "figure_stage": "final L60",
+  "five_panel": false,
+  "figure": "https://oms-hyu.github.io/Hyperspectral_HYU/assets/native_20261117/boat.jpg",
+  "evaluation_url": "https://oms-hyu.github.io/Hyperspectral_HYU/data/single/boat.json",
+  "public_repository": "OMS-HYU/Hyperspectral_HYU"
+}

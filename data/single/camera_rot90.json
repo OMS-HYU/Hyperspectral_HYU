@@ -1,0 +1,22 @@
+{
+  "scene": "camera_rot90",
+  "name": "Cameraman 90°",
+  "wavelength_nm": 660,
+  "gd_accepted": 150,
+  "lbfgs_accepted": 60,
+  "extra_lbfgs_accepted": 0,
+  "circular_rmse_rad": 0.05832919183968789,
+  "linear_rmse_rad": 0.18423556078307804,
+  "sensor_l2": 0.008774476647485504,
+  "quality_pass": true,
+  "phase_sha256": "3aad2d62a5e416af473558a0405cf8ef3b32ad53d1f08648fabe3557144c8298",
+  "sensor_sha256": "8ef457490bc58a7a673f3a213e71ea45ab23adef83fc91194fddb9c6efb5cfec",
+  "truth_sha256": "0dbb11f279b6eb26c0b4fd87e324357667d2ca142a580ad3742685a215a1f239",
+  "variant": "GD150 + circular L-BFGS60 alpha=1e-4",
+  "verification": "Previously verified baseline; raw arrays may be in historical archives",
+  "figure_stage": "GD150 (final L60 image not uploaded)",
+  "five_panel": false,
+  "figure": "https://oms-hyu.github.io/Hyperspectral_HYU/assets/native_20261117/camera_rot90.jpg",
+  "evaluation_url": "https://oms-hyu.github.io/Hyperspectral_HYU/data/single/camera_rot90.json",
+  "public_repository": "OMS-HYU/Hyperspectral_HYU"
+}
