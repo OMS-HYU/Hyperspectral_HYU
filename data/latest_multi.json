@@ -1,0 +1,15 @@
+{
+  "updated": "2026-11-18",
+  "model": "B17/5760/2856/3000/512, outside illumination 0",
+  "summary": "Known K3 새 분할 GD 첫 단계 미완료 · Unknown K3 재검증 전",
+  "known_zero_start_sensor_l2": 0.6509,
+  "known_truth_oracle_forward_l2": 0.0062869,
+  "historical_known_gd5_piston_aligned_rmse_rad": [
+    0.673,
+    1.47,
+    1.39
+  ],
+  "known_converged": false,
+  "blind_converged": false,
+  "source": "B17_Multi_Research_Audit_20261118.md"
+}
