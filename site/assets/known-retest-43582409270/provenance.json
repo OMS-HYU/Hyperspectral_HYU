@@ -1,0 +1,1621 @@
+[
+  {
+    "case": {
+      "scene": "barbara",
+      "wavelength_nm": 660,
+      "method": "spectral",
+      "seed": 672906,
+      "geometry_seed": 20261127,
+      "mode": "known",
+      "commit": "d525f2be0a3dfafcfcea51c67e4138c1b4d6545f",
+      "geometry": [
+        3800,
+        1429,
+        512,
+        3000
+      ],
+      "phase_rmse_gate_rad": 0.15,
+      "sensor_l2_gate_fraction": 0.025,
+      "independent_new_observation": true,
+      "source_sha256": "764b8a2748cc7ad381cccc047c5e512cb528c197ba86adb83aa339e8932e66c0"
+    },
+    "evaluation": {
+      "full_rmse_rad": 0.32251930697071024,
+      "sensor_l2": 0.019154819740705112,
+      "actual_wavelength_nm": 660.0,
+      "estimated_wavelength_nm": 660.0,
+      "wavelength_error_nm": 0.0,
+      "offset_rad": -2.791210513846083,
+      "completed": true,
+      "mode": "known",
+      "method": "spectral",
+      "gd_iterations": 100,
+      "lbfgs_iterations": 100,
+      "phase_pass": false,
+      "sensor_pass": true,
+      "wavelength_pass": true,
+      "passed": false
+    },
+    "recovery": {
+      "wavelength_nm": 660.0,
+      "method": "spectral",
+      "gd_iterations": 100,
+      "lbfgs_iterations": 100,
+      "completed": true,
+      "termination": "iteration_budget",
+      "sensor_l2": 0.019154819740705088,
+      "sensor_sha256": "d6812629d92ba3f57624d0a1601c5ad2319505b1affc37bf0098138589a36ab0",
+      "phase_sha256": "7d48b441b5818467e9aec689c44eda8386e873f247d2851f5bf95afc79d452dc",
+      "geometry": [
+        3800,
+        1429,
+        512,
+        3000
+      ],
+      "B17_archive_sha256": null,
+      "B17_source_fingerprint": "e403c0c98b5c62916d344d205b6e0a80e27ac1a8903d7c7e6c5557fbe409d376",
+      "B17_inner_shas": {
+        "bayesLUT_MSE_v6.3_nonoverlap.mat": "02c551f2e24fb01d91416ea21cd17d24ae1c5e6fab0d630bff8e1fb2b4feaeaa",
+        "0.6NA_random_70_1_300_1mm_mapped_width.mat": "b7d799c1e3a5913e7e9034fd2efc31dc2dab98822058ef08e2e57470ac2d68f9"
+      },
+      "phase_range": [
+        0,
+        6.283185307179586
+      ],
+      "alpha": 0.015,
+      "truth_in_inverse": false,
+      "spectral_preconditioner_source": "660 nm historical Jacobian; heuristic at other wavelengths",
+      "forward": 343,
+      "adjoint": 202,
+      "mode": "known",
+      "blind_experimental": false
+    },
+    "figure_sha256": "e5bf7eed109b6425dece2d9c074bc625c9daa0bd8a2f1d9320717c2aade7bece",
+    "figure": "assets/known-retest-43582409270/barbara-660-spectral.png"
+  },
+  {
+    "case": {
+      "scene": "bark",
+      "wavelength_nm": 660,
+      "method": "compare",
+      "seed": 672906,
+      "geometry_seed": 20261127,
+      "mode": "known",
+      "commit": "d525f2be0a3dfafcfcea51c67e4138c1b4d6545f",
+      "geometry": [
+        3800,
+        1429,
+        512,
+        3000
+      ],
+      "phase_rmse_gate_rad": 0.15,
+      "sensor_l2_gate_fraction": 0.025,
+      "independent_new_observation": true,
+      "source_sha256": "c8fdf15c52a33bf989d7d724ce5e5347507daf46e01e7488a101c1f2ad4ea5fe"
+    },
+    "evaluation": {
+      "full_rmse_rad": 0.15824409355860486,
+      "sensor_l2": 0.015657527809667785,
+      "actual_wavelength_nm": 660.0,
+      "estimated_wavelength_nm": 660.0,
+      "wavelength_error_nm": 0.0,
+      "offset_rad": 2.5781498597298578,
+      "completed": true,
+      "mode": "known",
+      "method": "pyramid",
+      "gd_iterations": 150,
+      "lbfgs_iterations": 150,
+      "phase_pass": false,
+      "sensor_pass": true,
+      "wavelength_pass": true,
+      "passed": false
+    },
+    "recovery": {
+      "wavelength_nm": 660.0,
+      "method": "pyramid",
+      "gd_iterations": 150,
+      "lbfgs_iterations": 150,
+      "completed": true,
+      "termination": "STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT",
+      "sensor_l2": 0.015657527809667764,
+      "sensor_sha256": "52572925ff7f1b2f5881ce61b2f89f811c2f7cfb11cf4459d2add22cf88c9b00",
+      "phase_sha256": "2f11c8800dabbb997b28ec3e155f87307650699c83c1fe11d41707d12d66f2b9",
+      "geometry": [
+        3800,
+        1429,
+        512,
+        3000
+      ],
+      "B17_archive_sha256": null,
+      "B17_source_fingerprint": "e403c0c98b5c62916d344d205b6e0a80e27ac1a8903d7c7e6c5557fbe409d376",
+      "B17_inner_shas": {
+        "bayesLUT_MSE_v6.3_nonoverlap.mat": "02c551f2e24fb01d91416ea21cd17d24ae1c5e6fab0d630bff8e1fb2b4feaeaa",
+        "0.6NA_random_70_1_300_1mm_mapped_width.mat": "b7d799c1e3a5913e7e9034fd2efc31dc2dab98822058ef08e2e57470ac2d68f9"
+      },
+      "phase_range": [
+        0,
+        6.283185307179586
+      ],
+      "alpha": 0.015,
+      "truth_in_inverse": false,
+      "pyramid_schedule": [
+        [
+          64,
+          35
+        ],
+        [
+          128,
+          35
+        ],
+        [
+          256,
+          40
+        ],
+        [
+          512,
+          40
+        ]
+      ],
+      "internal_lift": true,
+      "seconds": 652.1259663460002,
+      "forward": 517,
+      "adjoint": 311,
+      "mode": "known",
+      "blind_experimental": false
+    },
+    "figure_sha256": "23e377cb76840dc68c0b30297892808e125def459d0447fb259c845ecbdb07be",
+    "figure": "assets/known-retest-43582409270/bark-660-pyramid.png"
+  },
+  {
+    "case": {
+      "scene": "bark",
+      "wavelength_nm": 660,
+      "method": "compare",
+      "seed": 672906,
+      "geometry_seed": 20261127,
+      "mode": "known",
+      "commit": "d525f2be0a3dfafcfcea51c67e4138c1b4d6545f",
+      "geometry": [
+        3800,
+        1429,
+        512,
+        3000
+      ],
+      "phase_rmse_gate_rad": 0.15,
+      "sensor_l2_gate_fraction": 0.025,
+      "independent_new_observation": true,
+      "source_sha256": "c8fdf15c52a33bf989d7d724ce5e5347507daf46e01e7488a101c1f2ad4ea5fe"
+    },
+    "evaluation": {
+      "full_rmse_rad": 0.1601780085744569,
+      "sensor_l2": 0.015688209946050906,
+      "actual_wavelength_nm": 660.0,
+      "estimated_wavelength_nm": 660.0,
+      "wavelength_error_nm": 0.0,
+      "offset_rad": 2.4946925115052614,
+      "completed": true,
+      "mode": "known",
+      "method": "spectral",
+      "gd_iterations": 100,
+      "lbfgs_iterations": 100,
+      "phase_pass": false,
+      "sensor_pass": true,
+      "wavelength_pass": true,
+      "passed": false
+    },
+    "recovery": {
+      "wavelength_nm": 660.0,
+      "method": "spectral",
+      "gd_iterations": 100,
+      "lbfgs_iterations": 100,
+      "completed": true,
+      "termination": "iteration_budget",
+      "sensor_l2": 0.015688209946050927,
+      "sensor_sha256": "52572925ff7f1b2f5881ce61b2f89f811c2f7cfb11cf4459d2add22cf88c9b00",
+      "phase_sha256": "9f3eb6bcc140deb907584939ce70976abd5972d119c36c34ac0ec79244e77516",
+      "geometry": [
+        3800,
+        1429,
+        512,
+        3000
+      ],
+      "B17_archive_sha256": null,
+      "B17_source_fingerprint": "e403c0c98b5c62916d344d205b6e0a80e27ac1a8903d7c7e6c5557fbe409d376",
+      "B17_inner_shas": {
+        "bayesLUT_MSE_v6.3_nonoverlap.mat": "02c551f2e24fb01d91416ea21cd17d24ae1c5e6fab0d630bff8e1fb2b4feaeaa",
+        "0.6NA_random_70_1_300_1mm_mapped_width.mat": "b7d799c1e3a5913e7e9034fd2efc31dc2dab98822058ef08e2e57470ac2d68f9"
+      },
+      "phase_range": [
+        0,
+        6.283185307179586
+      ],
+      "alpha": 0.015,
+      "truth_in_inverse": false,
+      "spectral_preconditioner_source": "660 nm historical Jacobian; heuristic at other wavelengths",
+      "forward": 345,
+      "adjoint": 204,
+      "mode": "known",
+      "blind_experimental": false
+    },
+    "figure_sha256": "459e6d7ab51b6c5a863de856c31ab10eeb7a158a7d9423cde377b478ed9360fa",
+    "figure": "assets/known-retest-43582409270/bark-660-spectral.png"
+  },
+  {
+    "case": {
+      "scene": "boat",
+      "wavelength_nm": 550,
+      "method": "pyramid",
+      "seed": 672906,
+      "geometry_seed": 20261127,
+      "mode": "known",
+      "commit": "d525f2be0a3dfafcfcea51c67e4138c1b4d6545f",
+      "geometry": [
+        3800,
+        1429,
+        512,
+        3000
+      ],
+      "phase_rmse_gate_rad": 0.15,
+      "sensor_l2_gate_fraction": 0.025,
+      "independent_new_observation": true,
+      "source_sha256": "9b52b5aa5de695d0b8dedf63969f4b259ec924af9ac72496286cb0b128738a5b"
+    },
+    "evaluation": {
+      "full_rmse_rad": 0.05242560897860898,
+      "sensor_l2": 0.009814516722759752,
+      "actual_wavelength_nm": 550.0,
+      "estimated_wavelength_nm": 550.0,
+      "wavelength_error_nm": 0.0,
+      "offset_rad": 3.085078210212813,
+      "completed": true,
+      "mode": "known",
+      "method": "pyramid",
+      "gd_iterations": 150,
+      "lbfgs_iterations": 150,
+      "phase_pass": true,
+      "sensor_pass": true,
+      "wavelength_pass": true,
+      "passed": true
+    },
+    "recovery": {
+      "wavelength_nm": 550.0,
+      "method": "pyramid",
+      "gd_iterations": 150,
+      "lbfgs_iterations": 150,
+      "completed": true,
+      "termination": "STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT",
+      "sensor_l2": 0.009814516722759766,
+      "sensor_sha256": "0cabb7294dc4086ad6f1cae452f29092636a24fdfbc0c7ab9729af616c230b7b",
+      "phase_sha256": "d6ef4ec6e0565e31e0aa15a5f568bb3c12a7e65711e232d6b29db645db20475e",
+      "geometry": [
+        3800,
+        1429,
+        512,
+        3000
+      ],
+      "B17_archive_sha256": null,
+      "B17_source_fingerprint": "e403c0c98b5c62916d344d205b6e0a80e27ac1a8903d7c7e6c5557fbe409d376",
+      "B17_inner_shas": {
+        "bayesLUT_MSE_v6.3_nonoverlap.mat": "02c551f2e24fb01d91416ea21cd17d24ae1c5e6fab0d630bff8e1fb2b4feaeaa",
+        "0.6NA_random_70_1_300_1mm_mapped_width.mat": "b7d799c1e3a5913e7e9034fd2efc31dc2dab98822058ef08e2e57470ac2d68f9"
+      },
+      "phase_range": [
+        0,
+        6.283185307179586
+      ],
+      "alpha": 0.015,
+      "truth_in_inverse": false,
+      "pyramid_schedule": [
+        [
+          64,
+          35
+        ],
+        [
+          128,
+          35
+        ],
+        [
+          256,
+          40
+        ],
+        [
+          512,
+          40
+        ]
+      ],
+      "internal_lift": true,
+      "seconds": 806.953634717,
+      "forward": 506,
+      "adjoint": 309,
+      "mode": "known",
+      "blind_experimental": false
+    },
+    "figure_sha256": "e422541d60afd78ed40d04b09061e9eccf60431d23461d29a03e9314b3bfe187",
+    "figure": "assets/known-retest-43582409270/boat-550-pyramid.png"
+  },
+  {
+    "case": {
+      "scene": "brick_wall",
+      "wavelength_nm": 660,
+      "method": "spectral",
+      "seed": 672906,
+      "geometry_seed": 20261127,
+      "mode": "known",
+      "commit": "d525f2be0a3dfafcfcea51c67e4138c1b4d6545f",
+      "geometry": [
+        3800,
+        1429,
+        512,
+        3000
+      ],
+      "phase_rmse_gate_rad": 0.15,
+      "sensor_l2_gate_fraction": 0.025,
+      "independent_new_observation": true,
+      "source_sha256": "5088bad77bf312a61deb3c76f73ab11b898c150486d97b414bfa8d531ad1b7a6"
+    },
+    "evaluation": {
+      "full_rmse_rad": 1.622785024608295,
+      "sensor_l2": 0.37800071485744263,
+      "actual_wavelength_nm": 660.0,
+      "estimated_wavelength_nm": 660.0,
+      "wavelength_error_nm": 0.0,
+      "offset_rad": 1.1890344683513452,
+      "completed": true,
+      "mode": "known",
+      "method": "spectral",
+      "gd_iterations": 100,
+      "lbfgs_iterations": 100,
+      "phase_pass": false,
+      "sensor_pass": false,
+      "wavelength_pass": true,
+      "passed": false
+    },
+    "recovery": {
+      "wavelength_nm": 660.0,
+      "method": "spectral",
+      "gd_iterations": 100,
+      "lbfgs_iterations": 100,
+      "completed": true,
+      "termination": "iteration_budget",
+      "sensor_l2": 0.3780007148574403,
+      "sensor_sha256": "d51710268a7698edbd3b8300354d4f8edffabe9cdc28328b333f5c627b6cd430",
+      "phase_sha256": "f46a032c86e649d7bf04bab039e98992a77beaab8a752d55df5148f578f76ce2",
+      "geometry": [
+        3800,
+        1429,
+        512,
+        3000
+      ],
+      "B17_archive_sha256": null,
+      "B17_source_fingerprint": "e403c0c98b5c62916d344d205b6e0a80e27ac1a8903d7c7e6c5557fbe409d376",
+      "B17_inner_shas": {
+        "bayesLUT_MSE_v6.3_nonoverlap.mat": "02c551f2e24fb01d91416ea21cd17d24ae1c5e6fab0d630bff8e1fb2b4feaeaa",
+        "0.6NA_random_70_1_300_1mm_mapped_width.mat": "b7d799c1e3a5913e7e9034fd2efc31dc2dab98822058ef08e2e57470ac2d68f9"
+      },
+      "phase_range": [
+        0,
+        6.283185307179586
+      ],
+      "alpha": 0.015,
+      "truth_in_inverse": false,
+      "spectral_preconditioner_source": "660 nm historical Jacobian; heuristic at other wavelengths",
+      "forward": 343,
+      "adjoint": 202,
+      "mode": "known",
+      "blind_experimental": false
+    },
+    "figure_sha256": "e668d67aecc15bdd36ddf64d58486ab5d7dfef3254b91caeac65f11d3c8b4b83",
+    "figure": "assets/known-retest-43582409270/brick_wall-660-spectral.png"
+  },
+  {
+    "case": {
+      "scene": "grass",
+      "wavelength_nm": 500,
+      "method": "compare",
+      "seed": 672906,
+      "geometry_seed": 20261127,
+      "mode": "known",
+      "commit": "d525f2be0a3dfafcfcea51c67e4138c1b4d6545f",
+      "geometry": [
+        3800,
+        1429,
+        512,
+        3000
+      ],
+      "phase_rmse_gate_rad": 0.15,
+      "sensor_l2_gate_fraction": 0.025,
+      "independent_new_observation": true,
+      "source_sha256": "b3b87c12c9a5b1f433e93229cd9a088c689c88f1971af976613b006e447c7087"
+    },
+    "evaluation": {
+      "full_rmse_rad": 0.1281739158703208,
+      "sensor_l2": 0.01856637749420554,
+      "actual_wavelength_nm": 500.0,
+      "estimated_wavelength_nm": 500.0,
+      "wavelength_error_nm": 0.0,
+      "offset_rad": -2.9150301112394907,
+      "completed": true,
+      "mode": "known",
+      "method": "pyramid",
+      "gd_iterations": 150,
+      "lbfgs_iterations": 150,
+      "phase_pass": true,
+      "sensor_pass": true,
+      "wavelength_pass": true,
+      "passed": true
+    },
+    "recovery": {
+      "wavelength_nm": 500.0,
+      "method": "pyramid",
+      "gd_iterations": 150,
+      "lbfgs_iterations": 150,
+      "completed": true,
+      "termination": "STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT",
+      "sensor_l2": 0.018566377494205536,
+      "sensor_sha256": "b72fbf1a0c7271e1b0397fc5fbb1b6806f2ea34d74012b8a70fc0ae8fac25e44",
+      "phase_sha256": "5db500d978bca09f877924fe8151b7275427e347055814d8f84aa3cb8ac976d6",
+      "geometry": [
+        3800,
+        1429,
+        512,
+        3000
+      ],
+      "B17_archive_sha256": null,
+      "B17_source_fingerprint": "e403c0c98b5c62916d344d205b6e0a80e27ac1a8903d7c7e6c5557fbe409d376",
+      "B17_inner_shas": {
+        "bayesLUT_MSE_v6.3_nonoverlap.mat": "02c551f2e24fb01d91416ea21cd17d24ae1c5e6fab0d630bff8e1fb2b4feaeaa",
+        "0.6NA_random_70_1_300_1mm_mapped_width.mat": "b7d799c1e3a5913e7e9034fd2efc31dc2dab98822058ef08e2e57470ac2d68f9"
+      },
+      "phase_range": [
+        0,
+        6.283185307179586
+      ],
+      "alpha": 0.015,
+      "truth_in_inverse": false,
+      "pyramid_schedule": [
+        [
+          64,
+          35
+        ],
+        [
+          128,
+          35
+        ],
+        [
+          256,
+          40
+        ],
+        [
+          512,
+          40
+        ]
+      ],
+      "internal_lift": true,
+      "seconds": 656.597847972,
+      "forward": 530,
+      "adjoint": 311,
+      "mode": "known",
+      "blind_experimental": false
+    },
+    "figure_sha256": "294c80f3fc7afc431e1e434d86da3cfec6a787965408f187168f70ad771d77d3",
+    "figure": "assets/known-retest-43582409270/grass-500-pyramid.png"
+  },
+  {
+    "case": {
+      "scene": "grass",
+      "wavelength_nm": 500,
+      "method": "compare",
+      "seed": 672906,
+      "geometry_seed": 20261127,
+      "mode": "known",
+      "commit": "d525f2be0a3dfafcfcea51c67e4138c1b4d6545f",
+      "geometry": [
+        3800,
+        1429,
+        512,
+        3000
+      ],
+      "phase_rmse_gate_rad": 0.15,
+      "sensor_l2_gate_fraction": 0.025,
+      "independent_new_observation": true,
+      "source_sha256": "b3b87c12c9a5b1f433e93229cd9a088c689c88f1971af976613b006e447c7087"
+    },
+    "evaluation": {
+      "full_rmse_rad": 0.12933342557028651,
+      "sensor_l2": 0.01864152055580115,
+      "actual_wavelength_nm": 500.0,
+      "estimated_wavelength_nm": 500.0,
+      "wavelength_error_nm": 0.0,
+      "offset_rad": -2.9157028870197608,
+      "completed": true,
+      "mode": "known",
+      "method": "spectral",
+      "gd_iterations": 100,
+      "lbfgs_iterations": 100,
+      "phase_pass": true,
+      "sensor_pass": true,
+      "wavelength_pass": true,
+      "passed": true
+    },
+    "recovery": {
+      "wavelength_nm": 500.0,
+      "method": "spectral",
+      "gd_iterations": 100,
+      "lbfgs_iterations": 100,
+      "completed": true,
+      "termination": "iteration_budget",
+      "sensor_l2": 0.018641520555801195,
+      "sensor_sha256": "b72fbf1a0c7271e1b0397fc5fbb1b6806f2ea34d74012b8a70fc0ae8fac25e44",
+      "phase_sha256": "285df02bc92ee17b300556033f0bc758f9d5e3202134e6bd3fe5ca93bb377c02",
+      "geometry": [
+        3800,
+        1429,
+        512,
+        3000
+      ],
+      "B17_archive_sha256": null,
+      "B17_source_fingerprint": "e403c0c98b5c62916d344d205b6e0a80e27ac1a8903d7c7e6c5557fbe409d376",
+      "B17_inner_shas": {
+        "bayesLUT_MSE_v6.3_nonoverlap.mat": "02c551f2e24fb01d91416ea21cd17d24ae1c5e6fab0d630bff8e1fb2b4feaeaa",
+        "0.6NA_random_70_1_300_1mm_mapped_width.mat": "b7d799c1e3a5913e7e9034fd2efc31dc2dab98822058ef08e2e57470ac2d68f9"
+      },
+      "phase_range": [
+        0,
+        6.283185307179586
+      ],
+      "alpha": 0.015,
+      "truth_in_inverse": false,
+      "spectral_preconditioner_source": "660 nm historical Jacobian; heuristic at other wavelengths",
+      "forward": 348,
+      "adjoint": 207,
+      "mode": "known",
+      "blind_experimental": false
+    },
+    "figure_sha256": "d5503674485c011fc5636997577c962af5a3862c444938ce254c094163f4875a",
+    "figure": "assets/known-retest-43582409270/grass-500-spectral.png"
+  },
+  {
+    "case": {
+      "scene": "gravel",
+      "wavelength_nm": 470,
+      "method": "pyramid",
+      "seed": 672906,
+      "geometry_seed": 20261127,
+      "mode": "known",
+      "commit": "d525f2be0a3dfafcfcea51c67e4138c1b4d6545f",
+      "geometry": [
+        3800,
+        1429,
+        512,
+        3000
+      ],
+      "phase_rmse_gate_rad": 0.15,
+      "sensor_l2_gate_fraction": 0.025,
+      "independent_new_observation": true,
+      "source_sha256": "bc19bd245b1408b47ba0b6a5c7aa26a3f88c602cb2691633a9353933f2db72a9"
+    },
+    "evaluation": {
+      "full_rmse_rad": 0.05183851537576955,
+      "sensor_l2": 0.012110237931454479,
+      "actual_wavelength_nm": 470.0,
+      "estimated_wavelength_nm": 470.0,
+      "wavelength_error_nm": 0.0,
+      "offset_rad": -3.1167324838628594,
+      "completed": false,
+      "mode": "known",
+      "method": "pyramid",
+      "gd_iterations": 150,
+      "lbfgs_iterations": 87,
+      "phase_pass": true,
+      "sensor_pass": true,
+      "wavelength_pass": true,
+      "passed": false
+    },
+    "recovery": {
+      "wavelength_nm": 470.0,
+      "method": "pyramid",
+      "gd_iterations": 150,
+      "lbfgs_iterations": 87,
+      "completed": false,
+      "termination": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+      "sensor_l2": 0.012110237931454498,
+      "sensor_sha256": "747b5ab2dd8448decd67df9ea678b8d2c64c6f4983a97348963d6556ee7ba1a9",
+      "phase_sha256": "82cb65a1a38f9f1d63367b111e19fcd2fcf484df9496bcd6b44d93bdf7ef0a46",
+      "geometry": [
+        3800,
+        1429,
+        512,
+        3000
+      ],
+      "B17_archive_sha256": null,
+      "B17_source_fingerprint": "e403c0c98b5c62916d344d205b6e0a80e27ac1a8903d7c7e6c5557fbe409d376",
+      "B17_inner_shas": {
+        "bayesLUT_MSE_v6.3_nonoverlap.mat": "02c551f2e24fb01d91416ea21cd17d24ae1c5e6fab0d630bff8e1fb2b4feaeaa",
+        "0.6NA_random_70_1_300_1mm_mapped_width.mat": "b7d799c1e3a5913e7e9034fd2efc31dc2dab98822058ef08e2e57470ac2d68f9"
+      },
+      "phase_range": [
+        0,
+        6.283185307179586
+      ],
+      "alpha": 0.015,
+      "truth_in_inverse": false,
+      "pyramid_schedule": [
+        [
+          64,
+          35
+        ],
+        [
+          128,
+          35
+        ],
+        [
+          256,
+          40
+        ],
+        [
+          512,
+          40
+        ]
+      ],
+      "internal_lift": true,
+      "seconds": 771.081718952,
+      "forward": 601,
+      "adjoint": 385,
+      "mode": "known",
+      "blind_experimental": false
+    },
+    "figure_sha256": "6ee824ce758e8835b7f13a980e03ee14b4edb06d2426fa6dc76a54d2f829688b",
+    "figure": "assets/known-retest-43582409270/gravel-470-pyramid.png"
+  },
+  {
+    "case": {
+      "scene": "mandrill",
+      "wavelength_nm": 660,
+      "method": "spectral",
+      "seed": 672906,
+      "geometry_seed": 20261127,
+      "mode": "known",
+      "commit": "d525f2be0a3dfafcfcea51c67e4138c1b4d6545f",
+      "geometry": [
+        3800,
+        1429,
+        512,
+        3000
+      ],
+      "phase_rmse_gate_rad": 0.15,
+      "sensor_l2_gate_fraction": 0.025,
+      "independent_new_observation": true,
+      "source_sha256": "3e4d28fef4947946e31123deb7d0a4f41afab30a2d63c8daecb374e70d2c4f81"
+    },
+    "evaluation": {
+      "full_rmse_rad": 0.28122269722636745,
+      "sensor_l2": 0.023715926276275223,
+      "actual_wavelength_nm": 660.0,
+      "estimated_wavelength_nm": 660.0,
+      "wavelength_error_nm": 0.0,
+      "offset_rad": 3.081395356830265,
+      "completed": true,
+      "mode": "known",
+      "method": "spectral",
+      "gd_iterations": 100,
+      "lbfgs_iterations": 100,
+      "phase_pass": false,
+      "sensor_pass": true,
+      "wavelength_pass": true,
+      "passed": false
+    },
+    "recovery": {
+      "wavelength_nm": 660.0,
+      "method": "spectral",
+      "gd_iterations": 100,
+      "lbfgs_iterations": 100,
+      "completed": true,
+      "termination": "iteration_budget",
+      "sensor_l2": 0.023715926276275077,
+      "sensor_sha256": "1f2755c0d933872067b45de6b4be2231fe1aa9d653ce4e71d6d2968c1c37c899",
+      "phase_sha256": "82c92bdbd3085f52e6a613acf293c7828e7358505a7ddc07017b144e0a786e1d",
+      "geometry": [
+        3800,
+        1429,
+        512,
+        3000
+      ],
+      "B17_archive_sha256": null,
+      "B17_source_fingerprint": "e403c0c98b5c62916d344d205b6e0a80e27ac1a8903d7c7e6c5557fbe409d376",
+      "B17_inner_shas": {
+        "bayesLUT_MSE_v6.3_nonoverlap.mat": "02c551f2e24fb01d91416ea21cd17d24ae1c5e6fab0d630bff8e1fb2b4feaeaa",
+        "0.6NA_random_70_1_300_1mm_mapped_width.mat": "b7d799c1e3a5913e7e9034fd2efc31dc2dab98822058ef08e2e57470ac2d68f9"
+      },
+      "phase_range": [
+        0,
+        6.283185307179586
+      ],
+      "alpha": 0.015,
+      "truth_in_inverse": false,
+      "spectral_preconditioner_source": "660 nm historical Jacobian; heuristic at other wavelengths",
+      "forward": 346,
+      "adjoint": 205,
+      "mode": "known",
+      "blind_experimental": false
+    },
+    "figure_sha256": "e2a849a27fbe87481c781c132dc24743bd1717c0db5b9deb10ca1754a0352606",
+    "figure": "assets/known-retest-43582409270/mandrill-660-spectral.png"
+  },
+  {
+    "case": {
+      "scene": "pepper",
+      "wavelength_nm": 550,
+      "method": "pyramid",
+      "seed": 672906,
+      "geometry_seed": 20261127,
+      "mode": "known",
+      "commit": "d525f2be0a3dfafcfcea51c67e4138c1b4d6545f",
+      "geometry": [
+        3800,
+        1429,
+        512,
+        3000
+      ],
+      "phase_rmse_gate_rad": 0.15,
+      "sensor_l2_gate_fraction": 0.025,
+      "independent_new_observation": true,
+      "source_sha256": "a7d68a01676188508929a2053e4ab694620449678421c72028e640aef7e12ec1"
+    },
+    "evaluation": {
+      "full_rmse_rad": 0.07048019577887053,
+      "sensor_l2": 0.008543206112606047,
+      "actual_wavelength_nm": 550.0,
+      "estimated_wavelength_nm": 550.0,
+      "wavelength_error_nm": 0.0,
+      "offset_rad": -2.97859740634401,
+      "completed": true,
+      "mode": "known",
+      "method": "pyramid",
+      "gd_iterations": 150,
+      "lbfgs_iterations": 150,
+      "phase_pass": true,
+      "sensor_pass": true,
+      "wavelength_pass": true,
+      "passed": true
+    },
+    "recovery": {
+      "wavelength_nm": 550.0,
+      "method": "pyramid",
+      "gd_iterations": 150,
+      "lbfgs_iterations": 150,
+      "completed": true,
+      "termination": "STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT",
+      "sensor_l2": 0.008543206112606056,
+      "sensor_sha256": "afd99687caf0789bec283e0e9e67d117365a5a34e3c870cb881d16b79a472407",
+      "phase_sha256": "d4f22aabd6a979eca67e12a163bd0dd6404c66caf60954c400b318e876493061",
+      "geometry": [
+        3800,
+        1429,
+        512,
+        3000
+      ],
+      "B17_archive_sha256": null,
+      "B17_source_fingerprint": "e403c0c98b5c62916d344d205b6e0a80e27ac1a8903d7c7e6c5557fbe409d376",
+      "B17_inner_shas": {
+        "bayesLUT_MSE_v6.3_nonoverlap.mat": "02c551f2e24fb01d91416ea21cd17d24ae1c5e6fab0d630bff8e1fb2b4feaeaa",
+        "0.6NA_random_70_1_300_1mm_mapped_width.mat": "b7d799c1e3a5913e7e9034fd2efc31dc2dab98822058ef08e2e57470ac2d68f9"
+      },
+      "phase_range": [
+        0,
+        6.283185307179586
+      ],
+      "alpha": 0.015,
+      "truth_in_inverse": false,
+      "pyramid_schedule": [
+        [
+          64,
+          35
+        ],
+        [
+          128,
+          35
+        ],
+        [
+          256,
+          40
+        ],
+        [
+          512,
+          40
+        ]
+      ],
+      "internal_lift": true,
+      "seconds": 516.2795330229999,
+      "forward": 526,
+      "adjoint": 316,
+      "mode": "known",
+      "blind_experimental": false
+    },
+    "figure_sha256": "c560d98ff64db731df49a3bee3b9492935d47eeaddac6973aacc12b28c59f581",
+    "figure": "assets/known-retest-43582409270/pepper-550-pyramid.png"
+  },
+  {
+    "case": {
+      "scene": "random_texture",
+      "wavelength_nm": 660,
+      "method": "spectral",
+      "seed": 672906,
+      "geometry_seed": 20261127,
+      "mode": "known",
+      "commit": "d525f2be0a3dfafcfcea51c67e4138c1b4d6545f",
+      "geometry": [
+        3800,
+        1429,
+        512,
+        3000
+      ],
+      "phase_rmse_gate_rad": 0.15,
+      "sensor_l2_gate_fraction": 0.025,
+      "independent_new_observation": true,
+      "source_sha256": "a516ea2cc7c382d1e72c24eae95fa824fbbddbc5c5119fd12fd6eea3d5a890d7"
+    },
+    "evaluation": {
+      "full_rmse_rad": 1.3226981021459374,
+      "sensor_l2": 0.019611915219579574,
+      "actual_wavelength_nm": 660.0,
+      "estimated_wavelength_nm": 660.0,
+      "wavelength_error_nm": 0.0,
+      "offset_rad": 0.04067698166526018,
+      "completed": true,
+      "mode": "known",
+      "method": "spectral",
+      "gd_iterations": 100,
+      "lbfgs_iterations": 100,
+      "phase_pass": false,
+      "sensor_pass": true,
+      "wavelength_pass": true,
+      "passed": false
+    },
+    "recovery": {
+      "wavelength_nm": 660.0,
+      "method": "spectral",
+      "gd_iterations": 100,
+      "lbfgs_iterations": 100,
+      "completed": true,
+      "termination": "iteration_budget",
+      "sensor_l2": 0.019611915219579446,
+      "sensor_sha256": "23d85c63da9586d68061e3a5d6e634751445441b7f03bf138cc8508d85d9f31c",
+      "phase_sha256": "b901f3d19371dcd309c24da7b98372b9d83e451c6af89392d2b544f91dee2790",
+      "geometry": [
+        3800,
+        1429,
+        512,
+        3000
+      ],
+      "B17_archive_sha256": null,
+      "B17_source_fingerprint": "e403c0c98b5c62916d344d205b6e0a80e27ac1a8903d7c7e6c5557fbe409d376",
+      "B17_inner_shas": {
+        "bayesLUT_MSE_v6.3_nonoverlap.mat": "02c551f2e24fb01d91416ea21cd17d24ae1c5e6fab0d630bff8e1fb2b4feaeaa",
+        "0.6NA_random_70_1_300_1mm_mapped_width.mat": "b7d799c1e3a5913e7e9034fd2efc31dc2dab98822058ef08e2e57470ac2d68f9"
+      },
+      "phase_range": [
+        0,
+        6.283185307179586
+      ],
+      "alpha": 0.015,
+      "truth_in_inverse": false,
+      "spectral_preconditioner_source": "660 nm historical Jacobian; heuristic at other wavelengths",
+      "forward": 341,
+      "adjoint": 202,
+      "mode": "known",
+      "blind_experimental": false
+    },
+    "figure_sha256": "43457a3c3180ea1ae70d241562d3c3f77351303bdd0fab945d4a37035231d459",
+    "figure": "assets/known-retest-43582409270/random_texture-660-spectral.png"
+  },
+  {
+    "case": {
+      "scene": "rot270",
+      "wavelength_nm": 550,
+      "method": "pyramid",
+      "seed": 672906,
+      "geometry_seed": 20261127,
+      "mode": "known",
+      "commit": "d525f2be0a3dfafcfcea51c67e4138c1b4d6545f",
+      "geometry": [
+        3800,
+        1429,
+        512,
+        3000
+      ],
+      "phase_rmse_gate_rad": 0.15,
+      "sensor_l2_gate_fraction": 0.025,
+      "independent_new_observation": true,
+      "source_sha256": "f1d62ac25f8431894125d7411625688fb040f970c7485282ae651568df394180"
+    },
+    "evaluation": {
+      "full_rmse_rad": 0.09150678828885818,
+      "sensor_l2": 0.012437964082600958,
+      "actual_wavelength_nm": 550.0,
+      "estimated_wavelength_nm": 550.0,
+      "wavelength_error_nm": 0.0,
+      "offset_rad": 1.2276555139916572,
+      "completed": true,
+      "mode": "known",
+      "method": "pyramid",
+      "gd_iterations": 150,
+      "lbfgs_iterations": 150,
+      "phase_pass": true,
+      "sensor_pass": true,
+      "wavelength_pass": true,
+      "passed": true
+    },
+    "recovery": {
+      "wavelength_nm": 550.0,
+      "method": "pyramid",
+      "gd_iterations": 150,
+      "lbfgs_iterations": 150,
+      "completed": true,
+      "termination": "STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT",
+      "sensor_l2": 0.012437964082600981,
+      "sensor_sha256": "af67de27ba65b36a3a8e00b8afbccc87dbc8ea0ae6e5a69927d4ce39d1005897",
+      "phase_sha256": "d63db3247bb9a66b3096a96fe8dac745c54787dbeedbdbf210a131427c3585d0",
+      "geometry": [
+        3800,
+        1429,
+        512,
+        3000
+      ],
+      "B17_archive_sha256": null,
+      "B17_source_fingerprint": "e403c0c98b5c62916d344d205b6e0a80e27ac1a8903d7c7e6c5557fbe409d376",
+      "B17_inner_shas": {
+        "bayesLUT_MSE_v6.3_nonoverlap.mat": "02c551f2e24fb01d91416ea21cd17d24ae1c5e6fab0d630bff8e1fb2b4feaeaa",
+        "0.6NA_random_70_1_300_1mm_mapped_width.mat": "b7d799c1e3a5913e7e9034fd2efc31dc2dab98822058ef08e2e57470ac2d68f9"
+      },
+      "phase_range": [
+        0,
+        6.283185307179586
+      ],
+      "alpha": 0.015,
+      "truth_in_inverse": false,
+      "pyramid_schedule": [
+        [
+          64,
+          35
+        ],
+        [
+          128,
+          35
+        ],
+        [
+          256,
+          40
+        ],
+        [
+          512,
+          40
+        ]
+      ],
+      "internal_lift": true,
+      "seconds": 742.223265197,
+      "forward": 502,
+      "adjoint": 309,
+      "mode": "known",
+      "blind_experimental": false
+    },
+    "figure_sha256": "3f2240a3cb584ec3dd9a90b9a90a048ef6ff197b3ec86ee807bd9e9c5ab0d410",
+    "figure": "assets/known-retest-43582409270/rot270-550-pyramid.png"
+  },
+  {
+    "case": {
+      "scene": "sand",
+      "wavelength_nm": 660,
+      "method": "compare",
+      "seed": 672906,
+      "geometry_seed": 20261127,
+      "mode": "known",
+      "commit": "d525f2be0a3dfafcfcea51c67e4138c1b4d6545f",
+      "geometry": [
+        3800,
+        1429,
+        512,
+        3000
+      ],
+      "phase_rmse_gate_rad": 0.15,
+      "sensor_l2_gate_fraction": 0.025,
+      "independent_new_observation": true,
+      "source_sha256": "cb5e9357b537758d7d7b7130810d8d5947334eafc01e79e606e8f27574a62ae7"
+    },
+    "evaluation": {
+      "full_rmse_rad": 0.15978148184661264,
+      "sensor_l2": 0.016485691037886958,
+      "actual_wavelength_nm": 660.0,
+      "estimated_wavelength_nm": 660.0,
+      "wavelength_error_nm": 0.0,
+      "offset_rad": 2.412744772162024,
+      "completed": true,
+      "mode": "known",
+      "method": "pyramid",
+      "gd_iterations": 150,
+      "lbfgs_iterations": 150,
+      "phase_pass": false,
+      "sensor_pass": true,
+      "wavelength_pass": true,
+      "passed": false
+    },
+    "recovery": {
+      "wavelength_nm": 660.0,
+      "method": "pyramid",
+      "gd_iterations": 150,
+      "lbfgs_iterations": 150,
+      "completed": true,
+      "termination": "STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT",
+      "sensor_l2": 0.016485691037887003,
+      "sensor_sha256": "03a2f7b37e2fc897ff98ef0d1d51da0e8ac33569ad55b0924224047812a3cb4c",
+      "phase_sha256": "ab013d9d99377a36bd54b583d027ebe2e36d1750e9e8078ee8a7526212c41c46",
+      "geometry": [
+        3800,
+        1429,
+        512,
+        3000
+      ],
+      "B17_archive_sha256": null,
+      "B17_source_fingerprint": "e403c0c98b5c62916d344d205b6e0a80e27ac1a8903d7c7e6c5557fbe409d376",
+      "B17_inner_shas": {
+        "bayesLUT_MSE_v6.3_nonoverlap.mat": "02c551f2e24fb01d91416ea21cd17d24ae1c5e6fab0d630bff8e1fb2b4feaeaa",
+        "0.6NA_random_70_1_300_1mm_mapped_width.mat": "b7d799c1e3a5913e7e9034fd2efc31dc2dab98822058ef08e2e57470ac2d68f9"
+      },
+      "phase_range": [
+        0,
+        6.283185307179586
+      ],
+      "alpha": 0.015,
+      "truth_in_inverse": false,
+      "pyramid_schedule": [
+        [
+          64,
+          35
+        ],
+        [
+          128,
+          35
+        ],
+        [
+          256,
+          40
+        ],
+        [
+          512,
+          40
+        ]
+      ],
+      "internal_lift": true,
+      "seconds": 785.1102782679999,
+      "forward": 563,
+      "adjoint": 312,
+      "mode": "known",
+      "blind_experimental": false
+    },
+    "figure_sha256": "f18b5bf02a5a7a9becbcf4c49cd620fee0cafc2c5aea14b72ddc35940580d577",
+    "figure": "assets/known-retest-43582409270/sand-660-pyramid.png"
+  },
+  {
+    "case": {
+      "scene": "sand",
+      "wavelength_nm": 660,
+      "method": "compare",
+      "seed": 672906,
+      "geometry_seed": 20261127,
+      "mode": "known",
+      "commit": "d525f2be0a3dfafcfcea51c67e4138c1b4d6545f",
+      "geometry": [
+        3800,
+        1429,
+        512,
+        3000
+      ],
+      "phase_rmse_gate_rad": 0.15,
+      "sensor_l2_gate_fraction": 0.025,
+      "independent_new_observation": true,
+      "source_sha256": "cb5e9357b537758d7d7b7130810d8d5947334eafc01e79e606e8f27574a62ae7"
+    },
+    "evaluation": {
+      "full_rmse_rad": 0.1599180858876973,
+      "sensor_l2": 0.016486588321663886,
+      "actual_wavelength_nm": 660.0,
+      "estimated_wavelength_nm": 660.0,
+      "wavelength_error_nm": 0.0,
+      "offset_rad": 2.418902011853348,
+      "completed": true,
+      "mode": "known",
+      "method": "spectral",
+      "gd_iterations": 100,
+      "lbfgs_iterations": 100,
+      "phase_pass": false,
+      "sensor_pass": true,
+      "wavelength_pass": true,
+      "passed": false
+    },
+    "recovery": {
+      "wavelength_nm": 660.0,
+      "method": "spectral",
+      "gd_iterations": 100,
+      "lbfgs_iterations": 100,
+      "completed": true,
+      "termination": "iteration_budget",
+      "sensor_l2": 0.016486588321663876,
+      "sensor_sha256": "03a2f7b37e2fc897ff98ef0d1d51da0e8ac33569ad55b0924224047812a3cb4c",
+      "phase_sha256": "228186cff7246aa95d88e96c70244e6631f1119496d6f2ad20d033f1f3d9c1ad",
+      "geometry": [
+        3800,
+        1429,
+        512,
+        3000
+      ],
+      "B17_archive_sha256": null,
+      "B17_source_fingerprint": "e403c0c98b5c62916d344d205b6e0a80e27ac1a8903d7c7e6c5557fbe409d376",
+      "B17_inner_shas": {
+        "bayesLUT_MSE_v6.3_nonoverlap.mat": "02c551f2e24fb01d91416ea21cd17d24ae1c5e6fab0d630bff8e1fb2b4feaeaa",
+        "0.6NA_random_70_1_300_1mm_mapped_width.mat": "b7d799c1e3a5913e7e9034fd2efc31dc2dab98822058ef08e2e57470ac2d68f9"
+      },
+      "phase_range": [
+        0,
+        6.283185307179586
+      ],
+      "alpha": 0.015,
+      "truth_in_inverse": false,
+      "spectral_preconditioner_source": "660 nm historical Jacobian; heuristic at other wavelengths",
+      "forward": 344,
+      "adjoint": 204,
+      "mode": "known",
+      "blind_experimental": false
+    },
+    "figure_sha256": "045af0ffcd78f94d3894c13081eb920c4a0ea44bd6e90606b539d1058e8289ce",
+    "figure": "assets/known-retest-43582409270/sand-660-spectral.png"
+  },
+  {
+    "case": {
+      "scene": "stream",
+      "wavelength_nm": 660,
+      "method": "spectral",
+      "seed": 672906,
+      "geometry_seed": 20261127,
+      "mode": "known",
+      "commit": "d525f2be0a3dfafcfcea51c67e4138c1b4d6545f",
+      "geometry": [
+        3800,
+        1429,
+        512,
+        3000
+      ],
+      "phase_rmse_gate_rad": 0.15,
+      "sensor_l2_gate_fraction": 0.025,
+      "independent_new_observation": true,
+      "source_sha256": "46e400cfbccb2d92755a16d05a4b9a44477b62af2e2552a1053fabb0f81f747a"
+    },
+    "evaluation": {
+      "full_rmse_rad": 0.6193399885944376,
+      "sensor_l2": 0.12521042661099782,
+      "actual_wavelength_nm": 660.0,
+      "estimated_wavelength_nm": 660.0,
+      "wavelength_error_nm": 0.0,
+      "offset_rad": -2.5792402136962735,
+      "completed": true,
+      "mode": "known",
+      "method": "spectral",
+      "gd_iterations": 100,
+      "lbfgs_iterations": 100,
+      "phase_pass": false,
+      "sensor_pass": false,
+      "wavelength_pass": true,
+      "passed": false
+    },
+    "recovery": {
+      "wavelength_nm": 660.0,
+      "method": "spectral",
+      "gd_iterations": 100,
+      "lbfgs_iterations": 100,
+      "completed": true,
+      "termination": "iteration_budget",
+      "sensor_l2": 0.12521042661099754,
+      "sensor_sha256": "1bbe6f32d41f3ddcba3a3f2763777e84d6b694ad238aebe7741954a2145c32ff",
+      "phase_sha256": "20224fa384f1d2981668b3ec844e2f7dfc1f18eb9e6e84afbec360f3350a29af",
+      "geometry": [
+        3800,
+        1429,
+        512,
+        3000
+      ],
+      "B17_archive_sha256": null,
+      "B17_source_fingerprint": "e403c0c98b5c62916d344d205b6e0a80e27ac1a8903d7c7e6c5557fbe409d376",
+      "B17_inner_shas": {
+        "bayesLUT_MSE_v6.3_nonoverlap.mat": "02c551f2e24fb01d91416ea21cd17d24ae1c5e6fab0d630bff8e1fb2b4feaeaa",
+        "0.6NA_random_70_1_300_1mm_mapped_width.mat": "b7d799c1e3a5913e7e9034fd2efc31dc2dab98822058ef08e2e57470ac2d68f9"
+      },
+      "phase_range": [
+        0,
+        6.283185307179586
+      ],
+      "alpha": 0.015,
+      "truth_in_inverse": false,
+      "spectral_preconditioner_source": "660 nm historical Jacobian; heuristic at other wavelengths",
+      "forward": 343,
+      "adjoint": 202,
+      "mode": "known",
+      "blind_experimental": false
+    },
+    "figure_sha256": "51b0e3a4fcc29671f2b76557f85e736fd10bd87493ad1a5d92e7e1bec1ea1964",
+    "figure": "assets/known-retest-43582409270/stream-660-spectral.png"
+  },
+  {
+    "case": {
+      "scene": "tank",
+      "wavelength_nm": 550,
+      "method": "pyramid",
+      "seed": 672906,
+      "geometry_seed": 20261127,
+      "mode": "known",
+      "commit": "d525f2be0a3dfafcfcea51c67e4138c1b4d6545f",
+      "geometry": [
+        3800,
+        1429,
+        512,
+        3000
+      ],
+      "phase_rmse_gate_rad": 0.15,
+      "sensor_l2_gate_fraction": 0.025,
+      "independent_new_observation": true,
+      "source_sha256": "622dbec79fffeb3d2550dd9803b4a1df3ea9ed0650750c5b396e7c6ec0390196"
+    },
+    "evaluation": {
+      "full_rmse_rad": 0.07426777055253761,
+      "sensor_l2": 0.00977516464144769,
+      "actual_wavelength_nm": 550.0,
+      "estimated_wavelength_nm": 550.0,
+      "wavelength_error_nm": 0.0,
+      "offset_rad": 3.013124853317157,
+      "completed": false,
+      "mode": "known",
+      "method": "pyramid",
+      "gd_iterations": 150,
+      "lbfgs_iterations": 73,
+      "phase_pass": true,
+      "sensor_pass": true,
+      "wavelength_pass": true,
+      "passed": false
+    },
+    "recovery": {
+      "wavelength_nm": 550.0,
+      "method": "pyramid",
+      "gd_iterations": 150,
+      "lbfgs_iterations": 73,
+      "completed": false,
+      "termination": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+      "sensor_l2": 0.009775164641447662,
+      "sensor_sha256": "a03560b4837bac555387e494bc91e2cd4084180a67312903df8da71f87b3e927",
+      "phase_sha256": "e01898a595e7872b9439b95f811afcd9aec545b3543a16fb2ef03aefc8f85d74",
+      "geometry": [
+        3800,
+        1429,
+        512,
+        3000
+      ],
+      "B17_archive_sha256": null,
+      "B17_source_fingerprint": "e403c0c98b5c62916d344d205b6e0a80e27ac1a8903d7c7e6c5557fbe409d376",
+      "B17_inner_shas": {
+        "bayesLUT_MSE_v6.3_nonoverlap.mat": "02c551f2e24fb01d91416ea21cd17d24ae1c5e6fab0d630bff8e1fb2b4feaeaa",
+        "0.6NA_random_70_1_300_1mm_mapped_width.mat": "b7d799c1e3a5913e7e9034fd2efc31dc2dab98822058ef08e2e57470ac2d68f9"
+      },
+      "phase_range": [
+        0,
+        6.283185307179586
+      ],
+      "alpha": 0.015,
+      "truth_in_inverse": false,
+      "pyramid_schedule": [
+        [
+          64,
+          35
+        ],
+        [
+          128,
+          35
+        ],
+        [
+          256,
+          40
+        ],
+        [
+          512,
+          40
+        ]
+      ],
+      "internal_lift": true,
+      "seconds": 866.699349763,
+      "forward": 513,
+      "adjoint": 277,
+      "mode": "known",
+      "blind_experimental": false
+    },
+    "figure_sha256": "a02d0238cbefaa6174a5515c68e2487872dea41fa9b4722b6ee7e17a0fdc3e42",
+    "figure": "assets/known-retest-43582409270/tank-550-pyramid.png"
+  },
+  {
+    "case": {
+      "scene": "triple",
+      "wavelength_nm": 660,
+      "method": "spectral",
+      "seed": 672906,
+      "geometry_seed": 20261127,
+      "mode": "known",
+      "commit": "d525f2be0a3dfafcfcea51c67e4138c1b4d6545f",
+      "geometry": [
+        3800,
+        1429,
+        512,
+        3000
+      ],
+      "phase_rmse_gate_rad": 0.15,
+      "sensor_l2_gate_fraction": 0.025,
+      "independent_new_observation": true,
+      "source_sha256": null
+    },
+    "evaluation": {
+      "full_rmse_rad": 0.029799429616314557,
+      "sensor_l2": 0.004392673203444246,
+      "actual_wavelength_nm": 660.0,
+      "estimated_wavelength_nm": 660.0,
+      "wavelength_error_nm": 0.0,
+      "offset_rad": -0.052972291599514686,
+      "completed": true,
+      "mode": "known",
+      "method": "spectral",
+      "gd_iterations": 100,
+      "lbfgs_iterations": 100,
+      "roi_rmse_rad": 0.08006449611709496,
+      "background_rmse_rad": 0.019947313283760457,
+      "layer_1_rmse_rad": 0.06565856516386222,
+      "layer_2_rmse_rad": 0.07327086313310995,
+      "layer_3_rmse_rad": 0.11036253520665444,
+      "groups": [
+        {
+          "group": 1,
+          "rmse_rad": 0.04227337906873474
+        },
+        {
+          "group": 2,
+          "rmse_rad": 0.043408554055346056
+        },
+        {
+          "group": 3,
+          "rmse_rad": 0.040706746451021694
+        },
+        {
+          "group": 4,
+          "rmse_rad": 0.04958244983431541
+        },
+        {
+          "group": 5,
+          "rmse_rad": 0.04330535941961355
+        },
+        {
+          "group": 6,
+          "rmse_rad": 0.04337512212665643
+        },
+        {
+          "group": 7,
+          "rmse_rad": 0.04834999213067573
+        },
+        {
+          "group": 8,
+          "rmse_rad": 0.04241135973784757
+        },
+        {
+          "group": 9,
+          "rmse_rad": 0.039081560221942764
+        },
+        {
+          "group": 10,
+          "rmse_rad": 0.041932445836247466
+        },
+        {
+          "group": 11,
+          "rmse_rad": 0.046859567436048764
+        },
+        {
+          "group": 12,
+          "rmse_rad": 0.047642423081235966
+        },
+        {
+          "group": 13,
+          "rmse_rad": 0.04086750220523592
+        },
+        {
+          "group": 14,
+          "rmse_rad": 0.038800668728432894
+        },
+        {
+          "group": 15,
+          "rmse_rad": 0.0404092099094568
+        },
+        {
+          "group": 16,
+          "rmse_rad": 0.04272519250248658
+        },
+        {
+          "group": 17,
+          "rmse_rad": 0.045203225761568475
+        },
+        {
+          "group": 18,
+          "rmse_rad": 0.045194329205255415
+        },
+        {
+          "group": 19,
+          "rmse_rad": 0.04021029525558173
+        },
+        {
+          "group": 20,
+          "rmse_rad": 0.04138008487497795
+        },
+        {
+          "group": 21,
+          "rmse_rad": 0.03900835321263375
+        },
+        {
+          "group": 22,
+          "rmse_rad": 0.07683107320630361
+        },
+        {
+          "group": 23,
+          "rmse_rad": 0.054435842918063866
+        },
+        {
+          "group": 24,
+          "rmse_rad": 0.07191024719887586
+        },
+        {
+          "group": 25,
+          "rmse_rad": 0.04618334220690604
+        },
+        {
+          "group": 26,
+          "rmse_rad": 0.06675218143292636
+        },
+        {
+          "group": 27,
+          "rmse_rad": 0.07170477069032971
+        },
+        {
+          "group": 28,
+          "rmse_rad": 0.07409846838734781
+        },
+        {
+          "group": 29,
+          "rmse_rad": 0.0738921737185436
+        },
+        {
+          "group": 30,
+          "rmse_rad": 0.06815015635167282
+        },
+        {
+          "group": 31,
+          "rmse_rad": 0.3455918835921078
+        },
+        {
+          "group": 32,
+          "rmse_rad": 0.08135112348433991
+        },
+        {
+          "group": 33,
+          "rmse_rad": 0.05957734908748823
+        },
+        {
+          "group": 34,
+          "rmse_rad": 0.08013859425172856
+        },
+        {
+          "group": 35,
+          "rmse_rad": 0.06878305806290315
+        },
+        {
+          "group": 36,
+          "rmse_rad": 0.09079981586006723
+        },
+        {
+          "group": 37,
+          "rmse_rad": 0.09429144897615208
+        },
+        {
+          "group": 38,
+          "rmse_rad": 0.07511115343140541
+        },
+        {
+          "group": 39,
+          "rmse_rad": 0.05283325113172385
+        },
+        {
+          "group": 40,
+          "rmse_rad": 0.07774247154896427
+        },
+        {
+          "group": 41,
+          "rmse_rad": 0.12375978461329194
+        },
+        {
+          "group": 42,
+          "rmse_rad": 0.0847008176460081
+        },
+        {
+          "group": 43,
+          "rmse_rad": 0.07224186602980046
+        },
+        {
+          "group": 44,
+          "rmse_rad": 0.08453291721715148
+        },
+        {
+          "group": 45,
+          "rmse_rad": 0.07665514037493233
+        },
+        {
+          "group": 46,
+          "rmse_rad": 0.07810798825060598
+        },
+        {
+          "group": 47,
+          "rmse_rad": 0.07084225504505948
+        },
+        {
+          "group": 48,
+          "rmse_rad": 0.08252144104903385
+        },
+        {
+          "group": 49,
+          "rmse_rad": 0.06916633531557959
+        },
+        {
+          "group": 50,
+          "rmse_rad": 0.08216668315196891
+        }
+      ],
+      "groups_passed": 49,
+      "groups_total": 50,
+      "phase_pass": false,
+      "sensor_pass": true,
+      "wavelength_pass": true,
+      "passed": false
+    },
+    "recovery": {
+      "wavelength_nm": 660.0,
+      "method": "spectral",
+      "gd_iterations": 100,
+      "lbfgs_iterations": 100,
+      "completed": true,
+      "termination": "iteration_budget",
+      "sensor_l2": 0.004392673203444229,
+      "sensor_sha256": "d97d7f0512c472f59b12b0ceb1439d9b7dc01ad091b9a74653bbdb4ccc3a6523",
+      "phase_sha256": "a6091c9d5b635ed8173e4bfe8ddc85513a7b76482ce7c48b706c6ede76a96cd5",
+      "geometry": [
+        3800,
+        1429,
+        512,
+        3000
+      ],
+      "B17_archive_sha256": null,
+      "B17_source_fingerprint": "e403c0c98b5c62916d344d205b6e0a80e27ac1a8903d7c7e6c5557fbe409d376",
+      "B17_inner_shas": {
+        "bayesLUT_MSE_v6.3_nonoverlap.mat": "02c551f2e24fb01d91416ea21cd17d24ae1c5e6fab0d630bff8e1fb2b4feaeaa",
+        "0.6NA_random_70_1_300_1mm_mapped_width.mat": "b7d799c1e3a5913e7e9034fd2efc31dc2dab98822058ef08e2e57470ac2d68f9"
+      },
+      "phase_range": [
+        0,
+        6.283185307179586
+      ],
+      "alpha": 0.015,
+      "truth_in_inverse": false,
+      "spectral_preconditioner_source": "660 nm historical Jacobian; heuristic at other wavelengths",
+      "forward": 344,
+      "adjoint": 203,
+      "mode": "known",
+      "blind_experimental": false
+    },
+    "figure_sha256": "bbf738fd10b68d44b342f3133821bf7b6f5b23909481832dc1ed99f0703dc6d7",
+    "figure": "assets/known-retest-43582409270/triple-660-spectral.png"
+  }
+]

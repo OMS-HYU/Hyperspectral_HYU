@@ -1,0 +1,22 @@
+{
+  "scene": "mandrill",
+  "name": "Mandrill",
+  "wavelength_nm": 660,
+  "gd_accepted": 150,
+  "lbfgs_accepted": 60,
+  "extra_lbfgs_accepted": 20,
+  "circular_rmse_rad": 0.07238838128303081,
+  "linear_rmse_rad": 0.09619664439233329,
+  "sensor_l2": 0.0087375522206244,
+  "quality_pass": true,
+  "phase_sha256": "00414d210ae1c38d01316de4e3500b039c0f9f7a19f7a5bc3c89ad90a12d7c13",
+  "sensor_sha256": "8e44352d615413f43fcba6e91b92594d756470c8657447b03cbd11ba98dd9b02",
+  "truth_sha256": "33081783cc48fc8c7ecf8ff3df3d4d7bd27f257e403987a56da7aa3b977fb449",
+  "variant": "GD150 + circular L-BFGS60 alpha=1e-4 + restart Fourier circular L-BFGS20 alpha=3.85571e-5 (matched prior)",
+  "verification": "Previously verified baseline; raw arrays may be in historical archives",
+  "figure_stage": "final L60 + Fourier20",
+  "five_panel": false,
+  "figure": "https://oms-hyu.github.io/Hyperspectral_HYU/assets/native_20261117/mandrill.jpg",
+  "evaluation_url": "https://oms-hyu.github.io/Hyperspectral_HYU/data/single/mandrill.json",
+  "public_repository": "OMS-HYU/Hyperspectral_HYU"
+}

@@ -1,0 +1,443 @@
+{
+  "prior_figures": 62,
+  "added": 9,
+  "total_figures": 71,
+  "records": [
+    {
+      "mode": "known",
+      "title": "440 nm · 잡음 1% · Pyramid64 GD150 + L-BFGS150 · RMSE 0.055372 rad · 통과",
+      "w": 440,
+      "rmse": 0.0553722235376208,
+      "sensor": 1.1141674793902192,
+      "record": 0,
+      "source": "https://github.com/OMS-HYU/capstone_optics/actions/runs/42831938165/artifacts/13774360055",
+      "kind": "original_five_panel",
+      "sha256": "90f6fb6111405a867d3733cd4ba58fd755014d77b79e3bebab69bd2fc4d708d3",
+      "scene": "camera",
+      "artifact_path": "b17_k1_pyramid64_generalization_outputs/camera_440nm/pyramid64/five_panels_circular.png",
+      "evaluation_path": "b17_k1_pyramid64_generalization_outputs/camera_440nm/pyramid64/evaluation_circular.json"
+    },
+    {
+      "mode": "known",
+      "title": "440 nm · Pyramid64 GD150 중간 체크포인트 · 실제 저장 배열 재도식화 · RMSE 0.179135 rad",
+      "w": 440,
+      "rmse": 0.17913455963456468,
+      "record": 2,
+      "source": "https://github.com/OMS-HYU/capstone_optics/actions/runs/42831938165/artifacts/13774360055",
+      "kind": "checkpoint_three_panel",
+      "sha256": "5d53da349ed4385b2e119bac01f750e4b619f09b546a71e6ec2959d9297932d1",
+      "scene": "camera",
+      "artifact_path": "private_truth.npz + gd150_phase.npz"
+    },
+    {
+      "mode": "known",
+      "title": "660 nm · 잡음 1% · Pyramid64 GD150 + L-BFGS150 · RMSE 0.142733 rad · 통과",
+      "w": 660,
+      "rmse": 0.1427333832396723,
+      "sensor": 1.1879851851227334,
+      "record": 1,
+      "source": "https://github.com/OMS-HYU/capstone_optics/actions/runs/42831938165/artifacts/13773021542",
+      "kind": "original_five_panel",
+      "sha256": "7a2cccd83bef2af831bd87daf5972641aa49a7c081607e0053061fc697c98942",
+      "scene": "camera",
+      "artifact_path": "b17_k1_pyramid64_generalization_outputs/camera_660nm/pyramid64/five_panels_circular.png",
+      "evaluation_path": "b17_k1_pyramid64_generalization_outputs/camera_660nm/pyramid64/evaluation_circular.json"
+    },
+    {
+      "mode": "known",
+      "title": "660 nm · Pyramid64 GD150 중간 체크포인트 · 실제 저장 배열 재도식화 · RMSE 0.505204 rad",
+      "w": 660,
+      "rmse": 0.5052037720810064,
+      "record": 3,
+      "source": "https://github.com/OMS-HYU/capstone_optics/actions/runs/42831938165/artifacts/13773021542",
+      "kind": "checkpoint_three_panel",
+      "sha256": "8576a5846202812f5d8faaba7e393e0f348c086422ad9e474b6ddec985c3498c",
+      "scene": "camera",
+      "artifact_path": "private_truth.npz + gd150_phase.npz"
+    },
+    {
+      "mode": "known",
+      "title": "440 nm · 잡음 1% · Pyramid64 GD150 + L-BFGS87 · RMSE 0.015244 rad · 통과",
+      "w": 440,
+      "rmse": 0.015244068686979521,
+      "sensor": 0.7545622639815825,
+      "record": 0,
+      "source": "https://github.com/OMS-HYU/capstone_optics/actions/runs/42831938165/artifacts/13774656910",
+      "kind": "original_five_panel",
+      "sha256": "39641c04a49c4c37a6c7ba7616a41790e33eb29af3a9a7ab5f334b1bcadf225f",
+      "scene": "coins",
+      "artifact_path": "b17_k1_pyramid64_generalization_outputs/coins_440nm/pyramid64/five_panels_circular.png",
+      "evaluation_path": "b17_k1_pyramid64_generalization_outputs/coins_440nm/pyramid64/evaluation_circular.json"
+    },
+    {
+      "mode": "known",
+      "title": "660 nm · 잡음 1% · Pyramid64 GD150 + L-BFGS150 · RMSE 0.066058 rad · 통과",
+      "w": 660,
+      "rmse": 0.06605835234570544,
+      "sensor": 0.8998868873072066,
+      "record": 1,
+      "source": "https://github.com/OMS-HYU/capstone_optics/actions/runs/42831938165/artifacts/13775790191",
+      "kind": "original_five_panel",
+      "sha256": "9c89a7386e42d038d093df6dc5c943f2f4b4e3b203a11392632cf6ec8f26a765",
+      "scene": "coins",
+      "artifact_path": "b17_k1_pyramid64_generalization_outputs/coins_660nm/pyramid64/five_panels_circular.png",
+      "evaluation_path": "b17_k1_pyramid64_generalization_outputs/coins_660nm/pyramid64/evaluation_circular.json"
+    },
+    {
+      "mode": "known",
+      "title": "660 nm · 잡음 1% · Pyramid64 GD150 + L-BFGS150 · RMSE 0.119159 rad · 통과",
+      "w": 660,
+      "rmse": 0.11915944180139552,
+      "sensor": 1.0019651378977779,
+      "record": 0,
+      "source": "https://github.com/OMS-HYU/capstone_optics/actions/runs/42820625037/artifacts/13766529124",
+      "kind": "original_five_panel",
+      "sha256": "1e9ed7b8caa7f001b04f958e15da730518362b1f9b7d3e6208ef91f69b2fb03b",
+      "scene": "astronaut",
+      "artifact_path": "b17_k1_multires_outputs/pyramid64/five_panels_circular.png",
+      "evaluation_path": "b17_k1_multires_outputs/pyramid64/evaluation_circular.json"
+    },
+    {
+      "mode": "known",
+      "title": "660 nm · 잡음 1% · Pyramid128 GD150 + L-BFGS150 · RMSE 0.124407 rad · 통과",
+      "w": 660,
+      "rmse": 0.1244071103440105,
+      "sensor": 1.0151042742763354,
+      "record": 2,
+      "source": "https://github.com/OMS-HYU/capstone_optics/actions/runs/42820625037/artifacts/13767539416",
+      "kind": "original_five_panel",
+      "sha256": "a01d824366c9b8d912ff33b1f6c276190c35e2f096c21a863076b796c1ebf4ba",
+      "scene": "astronaut",
+      "artifact_path": "b17_k1_multires_outputs/pyramid128/five_panels_circular.png",
+      "evaluation_path": "b17_k1_multires_outputs/pyramid128/evaluation_circular.json"
+    },
+    {
+      "mode": "known",
+      "title": "660 nm · 잡음 1% · Zero GD150 + L-BFGS150 · RMSE 0.204911 rad · 미달",
+      "w": 660,
+      "rmse": 0.20491063836522266,
+      "sensor": 4.501716279730178,
+      "record": 1,
+      "source": "https://github.com/OMS-HYU/capstone_optics/actions/runs/42810998498/artifacts/13762588701",
+      "kind": "original_five_panel",
+      "sha256": "8ad22126781bd1935b84ac550d3e2688bc5d29535d10ecea6feaaaf7dbc2ae0d",
+      "scene": "astronaut",
+      "artifact_path": "b17_k1_multistart_outputs/zero/five_panels_circular.png",
+      "evaluation_path": "b17_k1_multistart_outputs/zero/evaluation_circular.json"
+    }
+  ],
+  "coverage": [
+    {
+      "scene": "moon",
+      "name": "Moon",
+      "known_records": 4,
+      "known_figures": 5,
+      "unknown_figures": 1,
+      "blind_record": true
+    },
+    {
+      "scene": "moon_flipud",
+      "name": "Moon 상하반전",
+      "known_records": 0,
+      "known_figures": 0,
+      "unknown_figures": 3,
+      "blind_record": true
+    },
+    {
+      "scene": "brick",
+      "name": "Brick (scikit-image)",
+      "known_records": 5,
+      "known_figures": 4,
+      "unknown_figures": 1,
+      "blind_record": true
+    },
+    {
+      "scene": "chelsea",
+      "name": "Chelsea",
+      "known_records": 4,
+      "known_figures": 4,
+      "unknown_figures": 0,
+      "blind_record": false
+    },
+    {
+      "scene": "camera",
+      "name": "Cameraman 원본",
+      "known_records": 4,
+      "known_figures": 4,
+      "unknown_figures": 0,
+      "blind_record": false
+    },
+    {
+      "scene": "camera_rot90",
+      "name": "Cameraman 90°",
+      "known_records": 5,
+      "known_figures": 4,
+      "unknown_figures": 0,
+      "blind_record": false
+    },
+    {
+      "scene": "coins",
+      "name": "Coins",
+      "known_records": 2,
+      "known_figures": 2,
+      "unknown_figures": 3,
+      "blind_record": true
+    },
+    {
+      "scene": "astronaut",
+      "name": "Astronaut",
+      "known_records": 3,
+      "known_figures": 3,
+      "unknown_figures": 0,
+      "blind_record": false
+    },
+    {
+      "scene": "checkerboard",
+      "name": "Checkerboard",
+      "known_records": 0,
+      "known_figures": 0,
+      "unknown_figures": 3,
+      "blind_record": true
+    },
+    {
+      "scene": "boat",
+      "name": "Boat",
+      "known_records": 0,
+      "known_figures": 0,
+      "unknown_figures": 0,
+      "blind_record": false
+    },
+    {
+      "scene": "pepper",
+      "name": "Pepper",
+      "known_records": 0,
+      "known_figures": 0,
+      "unknown_figures": 0,
+      "blind_record": false
+    },
+    {
+      "scene": "tank",
+      "name": "Tank",
+      "known_records": 0,
+      "known_figures": 1,
+      "unknown_figures": 0,
+      "blind_record": false
+    },
+    {
+      "scene": "gravel",
+      "name": "Gravel",
+      "known_records": 1,
+      "known_figures": 0,
+      "unknown_figures": 1,
+      "blind_record": true
+    },
+    {
+      "scene": "grass",
+      "name": "Grass",
+      "known_records": 1,
+      "known_figures": 0,
+      "unknown_figures": 1,
+      "blind_record": true
+    },
+    {
+      "scene": "smooth",
+      "name": "Smooth random",
+      "known_records": 0,
+      "known_figures": 0,
+      "unknown_figures": 4,
+      "blind_record": false
+    },
+    {
+      "scene": "parrot",
+      "name": "Parrot",
+      "known_records": 2,
+      "known_figures": 1,
+      "unknown_figures": 0,
+      "blind_record": true
+    },
+    {
+      "scene": "bark",
+      "name": "Bark",
+      "known_records": 2,
+      "known_figures": 1,
+      "unknown_figures": 0,
+      "blind_record": true
+    },
+    {
+      "scene": "sand",
+      "name": "Sand",
+      "known_records": 2,
+      "known_figures": 1,
+      "unknown_figures": 0,
+      "blind_record": true
+    },
+    {
+      "scene": "stream",
+      "name": "Stream",
+      "known_records": 2,
+      "known_figures": 1,
+      "unknown_figures": 0,
+      "blind_record": true
+    },
+    {
+      "scene": "mandrill",
+      "name": "Mandrill",
+      "known_records": 2,
+      "known_figures": 1,
+      "unknown_figures": 0,
+      "blind_record": true
+    },
+    {
+      "scene": "barbara",
+      "name": "Barbara",
+      "known_records": 2,
+      "known_figures": 1,
+      "unknown_figures": 0,
+      "blind_record": true
+    },
+    {
+      "scene": "brick_wall",
+      "name": "Brick Wall",
+      "known_records": 2,
+      "known_figures": 1,
+      "unknown_figures": 0,
+      "blind_record": true
+    },
+    {
+      "scene": "random_texture",
+      "name": "Random Texture",
+      "known_records": 2,
+      "known_figures": 1,
+      "unknown_figures": 0,
+      "blind_record": true
+    },
+    {
+      "scene": "hflip",
+      "name": "Cameraman 좌우반전",
+      "known_records": 1,
+      "known_figures": 1,
+      "unknown_figures": 0,
+      "blind_record": false
+    },
+    {
+      "scene": "vflip",
+      "name": "Cameraman 상하반전",
+      "known_records": 1,
+      "known_figures": 1,
+      "unknown_figures": 0,
+      "blind_record": false
+    },
+    {
+      "scene": "rot45",
+      "name": "Cameraman 45°",
+      "known_records": 2,
+      "known_figures": 2,
+      "unknown_figures": 0,
+      "blind_record": false
+    },
+    {
+      "scene": "transpose",
+      "name": "Cameraman 전치",
+      "known_records": 4,
+      "known_figures": 2,
+      "unknown_figures": 0,
+      "blind_record": false
+    },
+    {
+      "scene": "antitranspose",
+      "name": "Cameraman 부대각선 반사",
+      "known_records": 1,
+      "known_figures": 1,
+      "unknown_figures": 0,
+      "blind_record": false
+    },
+    {
+      "scene": "rot180",
+      "name": "Cameraman 180°",
+      "known_records": 5,
+      "known_figures": 0,
+      "unknown_figures": 2,
+      "blind_record": true
+    },
+    {
+      "scene": "invert",
+      "name": "Cameraman 밝기반전",
+      "known_records": 5,
+      "known_figures": 0,
+      "unknown_figures": 2,
+      "blind_record": true
+    },
+    {
+      "scene": "rot270",
+      "name": "Cameraman 270°",
+      "known_records": 0,
+      "known_figures": 0,
+      "unknown_figures": 0,
+      "blind_record": false
+    },
+    {
+      "scene": "normal",
+      "name": "RBC Normal",
+      "known_records": 2,
+      "known_figures": 1,
+      "unknown_figures": 0,
+      "blind_record": false
+    },
+    {
+      "scene": "variable",
+      "name": "RBC Variable",
+      "known_records": 2,
+      "known_figures": 1,
+      "unknown_figures": 0,
+      "blind_record": false
+    },
+    {
+      "scene": "tilt",
+      "name": "RBC Tilt",
+      "known_records": 2,
+      "known_figures": 1,
+      "unknown_figures": 0,
+      "blind_record": false
+    },
+    {
+      "scene": "double",
+      "name": "RBC Double",
+      "known_records": 2,
+      "known_figures": 1,
+      "unknown_figures": 0,
+      "blind_record": false
+    },
+    {
+      "scene": "triple",
+      "name": "RBC Triple · 100 cells / 50 groups",
+      "known_records": 7,
+      "known_figures": 1,
+      "unknown_figures": 0,
+      "blind_record": false
+    },
+    {
+      "scene": "brightfield",
+      "name": "RBC 명시야 사진",
+      "known_records": 11,
+      "known_figures": 1,
+      "unknown_figures": 0,
+      "blind_record": false
+    },
+    {
+      "scene": "darkfield",
+      "name": "RBC 암시야 사진",
+      "known_records": 8,
+      "known_figures": 1,
+      "unknown_figures": 0,
+      "blind_record": false
+    },
+    {
+      "scene": "phasecontrast",
+      "name": "RBC 위상차 사진",
+      "known_records": 11,
+      "known_figures": 1,
+      "unknown_figures": 0,
+      "blind_record": false
+    }
+  ]
+}

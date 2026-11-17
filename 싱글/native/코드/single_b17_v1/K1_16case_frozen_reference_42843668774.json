@@ -1,0 +1,152 @@
+{
+  "reference_run_id": 42843668774,
+  "reference_run_url": "https://github.com/ericahanyang/capstone_optics/actions/runs/42843668774",
+  "purpose": "Frozen 16-case full-grid original B17 Pyramid64 GD150 + L-BFGS150 metrics and sensor checksums for main replay",
+  "notes": "Array hashes must match exactly. Metrics are posthoc assessment only and never fed into optimizer.",
+  "cases": [
+    {
+      "scene": "moon",
+      "wavelength_nm": 440,
+      "noise_pct": 1,
+      "sensor_array_sha256": "9d29c7bafa55c9682408ce7017f7d875651bab33fc8c1a2e7a98baf2a9140d52",
+      "phase_rmse_rad": 0.015376993085660191,
+      "sensor_l2": 0.005296620130331744,
+      "passed": true
+    },
+    {
+      "scene": "moon",
+      "wavelength_nm": 550,
+      "noise_pct": 1,
+      "sensor_array_sha256": "2e5edcb93664db7f2ad28e6ece1a5247bc8642b6ad1ff3bd81169198e537346c",
+      "phase_rmse_rad": 0.026555463956864766,
+      "sensor_l2": 0.007250660517699465,
+      "passed": true
+    },
+    {
+      "scene": "moon",
+      "wavelength_nm": 660,
+      "noise_pct": 1,
+      "sensor_array_sha256": "73b4f6fb707dcd42868ae0c5d3641652066193178997955e87ccce1d220f4524",
+      "phase_rmse_rad": 0.04089584778890237,
+      "sensor_l2": 0.003949608460037935,
+      "passed": true
+    },
+    {
+      "scene": "brick",
+      "wavelength_nm": 440,
+      "noise_pct": 1,
+      "sensor_array_sha256": "27f90f88a3104ad98ef4c20b6c32a306423c85ec45c7eb1b92822ebf61911c91",
+      "phase_rmse_rad": 0.013774307263182291,
+      "sensor_l2": 0.006387060479607261,
+      "passed": true
+    },
+    {
+      "scene": "brick",
+      "wavelength_nm": 550,
+      "noise_pct": 1,
+      "sensor_array_sha256": "0faca0a9943e91ea76a9ea08bd580da0b663ad69a5545357e512538aa7b69171",
+      "phase_rmse_rad": 0.02365330328373646,
+      "sensor_l2": 0.00771359850603576,
+      "passed": true
+    },
+    {
+      "scene": "brick",
+      "wavelength_nm": 660,
+      "noise_pct": 1,
+      "sensor_array_sha256": "f9ea04e7b1568ed9fcc2225cc4964cc92e470f07c48bcc659eb9daf64b7e7a59",
+      "phase_rmse_rad": 0.04317278720692872,
+      "sensor_l2": 0.006454205421514674,
+      "passed": true
+    },
+    {
+      "scene": "chelsea",
+      "wavelength_nm": 440,
+      "noise_pct": 1,
+      "sensor_array_sha256": "98ef2763bbfc3b14bb23d2b3e709b1978baea66d46a9fbf298e21df200f9c077",
+      "phase_rmse_rad": 0.011975346145118816,
+      "sensor_l2": 0.005936225393882964,
+      "passed": true
+    },
+    {
+      "scene": "chelsea",
+      "wavelength_nm": 550,
+      "noise_pct": 1,
+      "sensor_array_sha256": "00ca9be972863a51d4ff98e0fc44a29bad0c34107a0985c4ef13e539f473e3f8",
+      "phase_rmse_rad": 0.02108694365668772,
+      "sensor_l2": 0.007600365260365235,
+      "passed": true
+    },
+    {
+      "scene": "chelsea",
+      "wavelength_nm": 660,
+      "noise_pct": 1,
+      "sensor_array_sha256": "fd9b6d7ae7bd51d4cc0dc8081ce18696ec40d08b03c627728d689374ec02bbca",
+      "phase_rmse_rad": 0.044635253978264,
+      "sensor_l2": 0.005957983073441584,
+      "passed": true
+    },
+    {
+      "scene": "camera_rot90",
+      "wavelength_nm": 440,
+      "noise_pct": 1,
+      "sensor_array_sha256": "3b5a513d1083dab3c37ddb5f7b9c7e97fa3bddf8f7c1253588faa6d9acd2dd6b",
+      "phase_rmse_rad": 0.055600387686588246,
+      "sensor_l2": 0.011194211380152697,
+      "passed": true
+    },
+    {
+      "scene": "camera_rot90",
+      "wavelength_nm": 550,
+      "noise_pct": 1,
+      "sensor_array_sha256": "df18a73812de47518fc03e20b2623c5777f58816a1848a209aa24eb4b0888934",
+      "phase_rmse_rad": 0.09115438352756024,
+      "sensor_l2": 0.012421892907681361,
+      "passed": true
+    },
+    {
+      "scene": "camera_rot90",
+      "wavelength_nm": 660,
+      "noise_pct": 1,
+      "sensor_array_sha256": "68e924584a46b77a84a6cb9cc497ed51ef91dee6c8b3b2d7f4b4a9c759ec1004",
+      "phase_rmse_rad": 0.142124668466989,
+      "sensor_l2": 0.011857043012821228,
+      "passed": true
+    },
+    {
+      "scene": "moon",
+      "wavelength_nm": 660,
+      "noise_pct": 3,
+      "sensor_array_sha256": "22423aeabd63d3f6fbb8569132ade84a3f9cf2fc4c612815195aed61a759941d",
+      "phase_rmse_rad": 0.04096428744388097,
+      "sensor_l2": 0.008542239660641356,
+      "passed": true
+    },
+    {
+      "scene": "brick",
+      "wavelength_nm": 660,
+      "noise_pct": 3,
+      "sensor_array_sha256": "5f769be76c97d8c660a1c1cb6c3d57e410d5011ea1e7b626af766f1870828a7d",
+      "phase_rmse_rad": 0.043249299408535745,
+      "sensor_l2": 0.011770015218471146,
+      "passed": true
+    },
+    {
+      "scene": "chelsea",
+      "wavelength_nm": 660,
+      "noise_pct": 3,
+      "sensor_array_sha256": "02d8030bac603a7a45a8b39913bcdb979dbedc471651001d40238f3401e10c23",
+      "phase_rmse_rad": 0.044714986344445706,
+      "sensor_l2": 0.010374407379588805,
+      "passed": true
+    },
+    {
+      "scene": "camera_rot90",
+      "wavelength_nm": 660,
+      "noise_pct": 3,
+      "sensor_array_sha256": "acafb5f733951dad2b49708aa07299c941c0cf88484a1668c9ffb9d1de215b7f",
+      "phase_rmse_rad": 0.14207703101059105,
+      "sensor_l2": 0.014228828175677494,
+      "passed": true
+    }
+  ]
+}

@@ -1,3 +1,6 @@
+<!-- public-native-workspace -->
+현재 작업 위치: `싱글/native/` · 실행 환경: `.venv-native/Scripts/python.exe` · 공개 결과: https://oms-hyu.github.io/Hyperspectral_HYU/ · 이관 기록: `docs/NATIVE_MIGRATION_20261117.md`. 아래 이전 실행 경로는 과거 기록입니다.
+
 # Hyperspectral_HYU
 
 Single-shot metasurface-based phase and hyperspectral reconstruction | Hanyang University ERICA.

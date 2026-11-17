@@ -1,0 +1,21 @@
+{
+  "scene": "tank",
+  "name": "Tank",
+  "wavelength_nm": 660,
+  "gd_accepted": 150,
+  "lbfgs_accepted": 60,
+  "circular_rmse_rad": 0.05727736225102632,
+  "linear_rmse_rad": 0.05727736225102632,
+  "sensor_l2": 0.008755804879924063,
+  "quality_pass": true,
+  "phase_sha256": "74d9c39c5c918864177835a7ced1d8d596d67618d267a29237b9359503c07301",
+  "sensor_sha256": "abc1cf0aa7d018f8bd39b127240fbc65da72651ad9d24220c64554e44b49679e",
+  "truth_sha256": "ddb3abfe798932948e5f6c1aac9dfdb485b70d628ad62dcf3dfe5b01079195fe",
+  "variant": "float64 propagation recovery from GD150; curvature initialized separately",
+  "five_panel": true,
+  "verification": "Phase/sensor/truth SHA-256 verified",
+  "reference_float32_lbfgs_accepted": 37,
+  "figure": "https://oms-hyu.github.io/Hyperspectral_HYU/assets/native_20261117/tank.png",
+  "evaluation_url": "https://oms-hyu.github.io/Hyperspectral_HYU/data/single/tank.json",
+  "public_repository": "OMS-HYU/Hyperspectral_HYU"
+}

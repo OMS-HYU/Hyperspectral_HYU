@@ -15,3 +15,14 @@ venv/
 !연속/결과/.gitkeep
 benchmarks/local_artifacts/
 *.tmp
+
+# Native research stays in this public project's local workspace.
+/capstone_optics/
+/.venv-native/
+/실험/
+/싱글/native/실험/
+/싱글/native/이전연구/
+/싱글/native/결과/
+/싱글/native/데이터/*.zip
+*.npy
+*.npz

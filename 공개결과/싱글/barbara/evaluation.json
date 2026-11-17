@@ -1,0 +1,22 @@
+{
+  "scene": "barbara",
+  "name": "Barbara",
+  "wavelength_nm": 660,
+  "gd_accepted": 150,
+  "lbfgs_accepted": 60,
+  "extra_lbfgs_accepted": 0,
+  "circular_rmse_rad": 0.0606709824017699,
+  "linear_rmse_rad": 0.0626376649711003,
+  "sensor_l2": 0.008764453964812057,
+  "quality_pass": true,
+  "phase_sha256": "15d75dbc7c48fb7de901400c622b4b22d3f2830d1dcfc1d8cda72317c8996232",
+  "sensor_sha256": "b6dfc81a1aa1f7dd3d4e22236a6fb733ffd571d1d7d0d855af52e19f2d570836",
+  "truth_sha256": "d9dbdb6e0c05618e24f1c5e8cefe251acac12e16158e530f2c2bd8800de2f8fc",
+  "variant": "GD150 + circular L-BFGS60 alpha=1e-4",
+  "verification": "Previously verified baseline; raw arrays may be in historical archives",
+  "figure_stage": "final L60",
+  "five_panel": false,
+  "figure": "https://oms-hyu.github.io/Hyperspectral_HYU/assets/native_20261117/barbara.jpg",
+  "evaluation_url": "https://oms-hyu.github.io/Hyperspectral_HYU/data/single/barbara.json",
+  "public_repository": "OMS-HYU/Hyperspectral_HYU"
+}
